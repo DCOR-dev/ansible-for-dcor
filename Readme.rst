@@ -6,8 +6,7 @@ vanilla Ubuntu 24.04 machine.
 
 To get started on your control node, install ansible::
 
-    $ pipx install ansible
-    installed package ansible 11.6.0, installed using Python 3.12.3
+    pipx install ansible-core ansible
 
 Then, create a virtual machine with a vanilla Ubuntu 24.04 server installation.
 
