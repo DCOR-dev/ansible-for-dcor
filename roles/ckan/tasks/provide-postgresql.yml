@@ -1,9 +1,21 @@
 - name: Install postgresql
   ansible.builtin.apt:
     name:
-    - libpq5
-    - postgresql
+    # TODO:
+    # In cases where a new version of postgresql must be installed, the
+    # database must be migrated:
+    #     apt install postgresql-15 and postgresql-client-15
+    # destroy the database created by default:
+    #     pg_dropcluster --stop 15 main
+    # upgrade the old database:
+    #     pg_upgradecluster 14 main
+    # remove the old server and client packages
+    #     apt purge postgresql-14 and postgresql-client-14
+    # For now, we pin the version of postgresql.
+    - postgresql-14
+    - postgresql-client-14
     - python3-psycopg2
+    - libpq5
     state: latest
 - name: Create ckan_default user
   # sudo -u postgres createuser -S -D -R -P ckan_default
