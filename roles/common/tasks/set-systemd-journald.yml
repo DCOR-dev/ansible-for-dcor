@@ -1,0 +1,6 @@
+- name: Ensure limited memory used by system journal
+  community.general.ini_file:
+    path: /etc/systemd/journald.conf
+    section: "Journal"
+    option: SystemMaxUse
+    value: 200M

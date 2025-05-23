@@ -1,0 +1,8 @@
+# https://github.com/hifis-net/ansible-collection-toolkit/tree/main/roles/unattended_upgrades
+- name: Setup unattended upgrades
+  include_role:
+    name: hifis.toolkit.unattended_upgrades
+  vars:
+    unattended_automatic_reboot: true
+    unattended_automatic_reboot_time: "02:00"
+    unattended_mail_report: "{{ MAINTAINER_EMAIL }}"
