@@ -1,3 +1,4 @@
 MAINTAINER_EMAIL: "maintainer@example.com"
 POSTGRESQL_CKAN_PASSWORD: "SecretPostgresqlPassword"
 CKAN_SITE_URL: "http://{{ inventory_hostname }}"
+CKAN_STORAGE_PATH: "/data"

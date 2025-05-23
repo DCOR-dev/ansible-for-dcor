@@ -38,6 +38,10 @@
   ansible.builtin.shell:
     chdir: "/root/CKAN_software/"
     cmd: "tar xzf /root/CKAN_software/solr-{{ SOLR_VERSION }}.tgz solr-{{ SOLR_VERSION }}/bin/install_solr_service.sh --strip-components=2"
+- name: Create install directory
+  ansible.builtin.file:
+    path: /root/CKAN_software/
+    state: directory
 - name: Install Solr
   when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
   ansible.builtin.shell:
