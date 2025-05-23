@@ -1,12 +1,14 @@
 CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
-CKAN_STORAGE_PATH: "/var/lib/ckan/default"
 CKAN_INI_FILE: "/etc/ckan/default/ckan.ini"
+
+CKAN_STORAGE_PATH: "/var/lib/ckan/default"
 CKAN_MAJOR_VERSION: "2"
 CKAN_MINOR_VERSION: "2.11"
 CKAN_PATCH_VERSION: "2.11.3"
 CKAN_DEB_NAME: "python-ckan_{{ CKAN_MINOR_VERSION }}-{{ ansible_distribution_release }}_amd64.deb"
 CKAN_DEB_MD5: "e8fcc52f89dccf311fbe902361becd40"
 
+ANSIBLE_DOWNLOAD_DIR: "/root/ansible_downloads/"
 
 POSTGRESQL_CKAN_USER: "ckan_default"
 POSTGRESQL_CKAN_DATABASE: "ckan_default"

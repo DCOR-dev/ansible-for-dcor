@@ -1,0 +1,22 @@
+CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
+CKAN_INI_FILE: "/etc/ckan/default/ckan.ini"
+
+DCOR_SCRATCH_DIRECTORY: "/cache"
+
+DCOR_SITE_CONFIG_DIR: ""
+DCOR_DEVELOP: false
+DCOR_USE_MINIO: false
+
+MINIO_VOLUMES: "/srv/minio"
+
+# https://dl.min.io/server/minio/release/linux-amd64/archive/
+MINIO_SERVER_VERSION: "20250422221226.0.0"
+MINIO_SERVER_DEB_NAME: "minio_{{ MINIO_SERVER_VERSION }}_amd64.deb"
+MINIO_SERVER_DEB_SHA256: "d8898351831761e083e7ba6b74ea7ec478b9a6680794fe92e5e838145341c9c5"
+
+# https://dl.min.io/client/mc/release/linux-amd64/archive
+MINIO_CLIENT_VERSION: "20250416181326.0.0"
+MINIO_CLIENT_DEB_NAME: "mcli_{{ MINIO_CLIENT_VERSION }}_amd64.deb"
+MINIO_CLIENT_DEB_SHA256: "e4e100c6cb5cb7087527602f9a618c60599da345834e497d66f41af18ce730f1"
+
+ANSIBLE_DOWNLOAD_DIR: "/root/ansible_downloads/"

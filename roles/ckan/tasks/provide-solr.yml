@@ -28,24 +28,24 @@
       deluser --remove-home solr
       deluser --group solr
       update-rc.d -f solr remove
+- name: Create install directory
+  ansible.builtin.file:
+    path: "{{ ANSIBLE_DOWNLOAD_DIR }}"
+    state: directory
 - name: Download Solr
   ansible.builtin.get_url:
     url: "https://www.apache.org/dyn/closer.lua/solr/solr/{{ SOLR_VERSION }}/solr-{{ SOLR_VERSION }}.tgz?action=download"
-    dest: "/root/ansible_downloads/solr-{{ SOLR_VERSION }}.tgz"
+    dest: "{{ ANSIBLE_DOWNLOAD_DIR }}solr-{{ SOLR_VERSION }}.tgz"
     checksum: sha512:{{ SOLR_INSTALLER_SHA512 }}
     mode: '0400'
 - name: Extract the installer script
   ansible.builtin.shell:
-    chdir: "/root/ansible_downloads/"
-    cmd: "tar xzf /root/ansible_downloads/solr-{{ SOLR_VERSION }}.tgz solr-{{ SOLR_VERSION }}/bin/install_solr_service.sh --strip-components=2"
-- name: Create install directory
-  ansible.builtin.file:
-    path: /root/ansible_downloads/
-    state: directory
+    chdir: "{{ ANSIBLE_DOWNLOAD_DIR }}"
+    cmd: "tar xzf {{ ANSIBLE_DOWNLOAD_DIR }}solr-{{ SOLR_VERSION }}.tgz solr-{{ SOLR_VERSION }}/bin/install_solr_service.sh --strip-components=2"
 - name: Install Solr
   when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
   ansible.builtin.shell:
-    chdir: "/root/ansible_downloads/"
+    chdir: "{{ ANSIBLE_DOWNLOAD_DIR }}"
     cmd: "bash ./install_solr_service.sh solr-{{ SOLR_VERSION }}.tgz"
 - name: Make sure Solr started
   ansible.builtin.service:
@@ -72,6 +72,7 @@
   register: this
   failed_when: "'Solr Admin' not in this.content"
 - name: Restart Solr
+  when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
   ansible.builtin.service:
     name: solr
     state: restarted

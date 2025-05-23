@@ -1,0 +1,51 @@
+- name: Install Python tools
+  ansible.builtin.apt:
+    name:
+    - python3-pip
+    - python3-dev
+    - python3-venv
+    - build-essential
+- name: Create scratch directory
+  ansible.builtin.file:
+    path: "{{ DCOR_SCRATCH_DIRECTORY }}"
+    state: directory
+- name: CKAN_INI_FILE set dcor_object_store.access_key_id
+  community.general.ini_file:
+    path: "{{ CKAN_INI_FILE }}"
+    section: "app:main"
+    option: dcor_object_store.access_key_id
+    value: "{{ S3_ACCESS_KEY_ID }}"
+- name: CKAN_INI_FILE set dcor_object_store.secret_access_key
+  community.general.ini_file:
+    path: "{{ CKAN_INI_FILE }}"
+    section: "app:main"
+    option: dcor_object_store.secret_access_key
+    value: "{{ S3_SECRET_ACCESS_KEY }}"
+- name: Install DCOR
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: | 
+      source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+      pip install --upgrade pip
+      pip install --upgrade wheel
+      pip install --upgrade dcor_control
+  environment:
+    CKAN_INI: "{{ CKAN_INI_FILE }}"
+- name: Run dcor develop
+  when: DCOR_DEVELOP | bool == true
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: | 
+      source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+      dcor develop --yes
+  environment:
+    CKAN_INI: "{{ CKAN_INI_FILE }}"
+- name: Run dcor inspect
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: | 
+      source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+      dcor inspect --assume-yes
+  environment:
+    CKAN_INI: "{{ CKAN_INI_FILE }}"
+    DCOR_SITE_CONFIG_DIR: "{{ DCOR_SITE_CONFIG_DIR }}"
