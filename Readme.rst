@@ -12,3 +12,8 @@ To get started on your control node, install ansible::
     ansible-galaxy collection install community.general
     # https://docs.ansible.com/ansible/latest/collections/community/postgresql/index.html
     ansible-galaxy collection install community.postgresql
+
+The following roles are available:
+
+- common: General administrative tasks like unattended-upgrades
+- ckan: Install CKAN with all its dependencies (including postgresql and Solr)
