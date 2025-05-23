@@ -12,17 +12,17 @@
     state: latest
 - name: Create install directory
   ansible.builtin.file:
-    path: /root/CKAN_software/
+    path: /root/ansible_downloads/
     state: directory
 - name: Download CKAN
   ansible.builtin.get_url:
     url: "https://packaging.ckan.org/{{ CKAN_DEB_NAME  }}"
-    dest: "/root/CKAN_software/{{ CKAN_DEB_NAME }}"
+    dest: "/root/ansible_downloads/{{ CKAN_DEB_NAME }}"
     checksum: md5:{{ CKAN_DEB_MD5 }}
     mode: '0400'
 - name: Install CKAN
   ansible.builtin.apt:
-    deb: "/root/CKAN_software/{{ CKAN_DEB_NAME }}"
+    deb: "/root/ansible_downloads/{{ CKAN_DEB_NAME }}"
 - name: Create CKAN_STORAGE_PATH directory
   ansible.builtin.file:
     path: "{{ CKAN_STORAGE_PATH }}"
