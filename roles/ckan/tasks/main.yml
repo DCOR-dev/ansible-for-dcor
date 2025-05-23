@@ -1,0 +1,6 @@
+- include_tasks: provide-supervisor.yml
+- include_tasks: provide-redis.yml
+- include_tasks: provide-postgresql.yml
+- include_tasks: provide-solr.yml
+- include_tasks: provide-ckan.yml
+- include_tasks: provide-nginx.yml

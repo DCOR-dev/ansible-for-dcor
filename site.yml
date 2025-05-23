@@ -1,3 +1,4 @@
 - hosts: dcorservers
   roles:
     - common
+    - ckan

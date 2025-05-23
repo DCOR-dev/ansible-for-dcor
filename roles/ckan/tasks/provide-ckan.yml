@@ -1,0 +1,66 @@
+- name: Install Python 3
+  ansible.builtin.apt:
+    name:
+    - gcc
+    - python3
+    - python3-dev
+    - python-is-python3
+    state: latest
+- name: Install other requirements
+  ansible.builtin.apt:
+    name: wget
+    state: latest
+- name: Create /data directory
+  ansible.builtin.file:
+    path: /root/DCOR/install/
+    state: directory
+- name: Download CKAN
+  ansible.builtin.get_url:
+    url: "https://packaging.ckan.org/{{ CKAN_DEB_NAME  }}"
+    dest: "/root/DCOR/install/{{ CKAN_DEB_NAME }}"
+    checksum: md5:{{ CKAN_DEB_MD5 }}
+    mode: '0400'
+- name: Install CKAN
+  ansible.builtin.apt:
+    deb: "/root/DCOR/install/{{ CKAN_DEB_NAME }}"
+- name: Create CKAN_DATA_DIR directory
+  ansible.builtin.file:
+    path: "{{ CKAN_DATA_DIR }}"
+    state: directory
+    mode: '0750'
+    group: 'www-data'
+    owner: 'www-data'
+- name: CKAN_INI_FILE ckan.storage_path
+  community.general.ini_file:
+    path: "{{ CKAN_INI_FILE }}"
+    section: "app:main"
+    option: ckan.storage_path
+    value: "/data/ckan-{{ ansible_hostname }}"
+- name: CKAN_INI_FILE ckan.site_url
+  community.general.ini_file:
+    path: "{{ CKAN_INI_FILE }}"
+    section: "app:main"
+    option: ckan.site_url
+    value: "{{ CKAN_SITE_URL }}"
+- name: CKAN_INI_FILE set sqlalchemy.url
+  community.general.ini_file:
+    path: "{{ CKAN_INI_FILE }}"
+    section: "app:main"
+    option: sqlalchemy.url
+    value: "postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@localhost/{{ POSTGRESQL_CKAN_DATABASE }}"
+- name: Initialize CKAN database
+  ansible.builtin.shell:
+    cmd: | 
+      source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+      ckan db init
+  environment:
+    CKAN_INI: "{{ CKAN_INI_FILE }}"
+- name: Reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+    enabled: true
+- name: Restart supervisor
+  community.general.supervisorctl:
+    name: all
+    state: restarted

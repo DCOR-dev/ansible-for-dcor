@@ -10,3 +10,5 @@ To get started on your control node, install ansible::
     # https://github.com/hifis-net/ansible-collection-toolkit
     ansible-galaxy collection install hifis.toolkit
     ansible-galaxy collection install community.general
+    # https://docs.ansible.com/ansible/latest/collections/community/postgresql/index.html
+    ansible-galaxy collection install community.postgresql
