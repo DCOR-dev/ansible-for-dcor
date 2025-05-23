@@ -1,5 +1,5 @@
 CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
-CKAN_DATA_DIR: "/data"
+CKAN_STORAGE_PATH: "/var/lib/ckan/default"
 CKAN_INI_FILE: "/etc/ckan/default/ckan.ini"
 CKAN_MAJOR_VERSION: "2"
 CKAN_MINOR_VERSION: "2.11"

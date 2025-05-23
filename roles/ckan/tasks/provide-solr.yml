@@ -31,17 +31,17 @@
 - name: Download Solr
   ansible.builtin.get_url:
     url: "https://www.apache.org/dyn/closer.lua/solr/solr/{{ SOLR_VERSION }}/solr-{{ SOLR_VERSION }}.tgz?action=download"
-    dest: "/root/DCOR/install/solr-{{ SOLR_VERSION }}.tgz"
+    dest: "/root/CKAN_software/solr-{{ SOLR_VERSION }}.tgz"
     checksum: sha512:{{ SOLR_INSTALLER_SHA512 }}
     mode: '0400'
 - name: Extract the installer script
   ansible.builtin.shell:
-    chdir: "/root/DCOR/install/"
-    cmd: "tar xzf /root/DCOR/install/solr-{{ SOLR_VERSION }}.tgz solr-{{ SOLR_VERSION }}/bin/install_solr_service.sh --strip-components=2"
+    chdir: "/root/CKAN_software/"
+    cmd: "tar xzf /root/CKAN_software/solr-{{ SOLR_VERSION }}.tgz solr-{{ SOLR_VERSION }}/bin/install_solr_service.sh --strip-components=2"
 - name: Install Solr
   when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
   ansible.builtin.shell:
-    chdir: "/root/DCOR/install/"
+    chdir: "/root/CKAN_software/"
     cmd: "bash ./install_solr_service.sh solr-{{ SOLR_VERSION }}.tgz"
 - name: Make sure Solr started
   ansible.builtin.service:

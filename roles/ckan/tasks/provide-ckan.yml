@@ -10,22 +10,22 @@
   ansible.builtin.apt:
     name: wget
     state: latest
-- name: Create /data directory
+- name: Create install directory
   ansible.builtin.file:
-    path: /root/DCOR/install/
+    path: /root/CKAN_software/
     state: directory
 - name: Download CKAN
   ansible.builtin.get_url:
     url: "https://packaging.ckan.org/{{ CKAN_DEB_NAME  }}"
-    dest: "/root/DCOR/install/{{ CKAN_DEB_NAME }}"
+    dest: "/root/CKAN_software/{{ CKAN_DEB_NAME }}"
     checksum: md5:{{ CKAN_DEB_MD5 }}
     mode: '0400'
 - name: Install CKAN
   ansible.builtin.apt:
-    deb: "/root/DCOR/install/{{ CKAN_DEB_NAME }}"
-- name: Create CKAN_DATA_DIR directory
+    deb: "/root/CKAN_software/{{ CKAN_DEB_NAME }}"
+- name: Create CKAN_STORAGE_PATH directory
   ansible.builtin.file:
-    path: "{{ CKAN_DATA_DIR }}"
+    path: "{{ CKAN_STORAGE_PATH }}"
     state: directory
     mode: '0750'
     group: 'www-data'
