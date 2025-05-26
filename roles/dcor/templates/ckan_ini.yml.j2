@@ -8,6 +8,7 @@
 
 # General CKAN tweaks
 ckan.site_title: {{ CKAN_INI_SITE_TITLE }}
+ckan.site_url: {{ 'https' if DCOR_HTTPS_ENABLED else 'http' }}://{{ DCOR_PUBLIC_DOMAIN }}
 ckan.storage_path: {{ CKAN_INI_STORAGE_PATH }}
 # Do not publish which version we are running on
 hide_version: true

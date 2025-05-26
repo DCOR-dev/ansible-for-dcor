@@ -51,7 +51,25 @@
       dcor inspect --assume-yes
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
-#- name: Remove default CKAN nginx configuration
-
-#- name: Add DCOR nginx configuration
-
+- name: Remove default CKAN nginx configuration
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/ckan
+    state: absent
+- name: Add DCOR nginx configuration
+  ansible.builtin.template:
+    # Depending on whether HTTPS is enabled or not, a different config is used.
+    src: "etc_nginx_{{ 'https' if DCOR_HTTPS_ENABLED else 'http_only' }}.conf.j2"
+    dest: /etc/nginx/sites-available/dcor
+    owner: root
+    group: root
+    mode: '0644'
+- name: Enable nginx configuration
+  file:
+    src: /etc/nginx/sites-available/dcor
+    dest: /etc/nginx/sites-enabled/dcor
+    state: link
+- name: Reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+    enabled: yes

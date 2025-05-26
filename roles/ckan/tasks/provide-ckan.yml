@@ -33,12 +33,6 @@
     mode: '0750'
     group: 'www-data'
     owner: 'www-data'
-- name: CKAN_INI ckan.site_url
-  community.general.ini_file:
-    path: "{{ CKAN_INI }}"
-    section: "app:main"
-    option: ckan.site_url
-    value: "{{ CKAN_INI_SITE_URL }}"
 - name: CKAN_INI ckan.storage_path
   community.general.ini_file:
     path: "{{ CKAN_INI }}"

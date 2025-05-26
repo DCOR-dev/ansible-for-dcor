@@ -1,0 +1,9 @@
+# Note that nginx only caches GET and HEAD (not POST) by default:
+# http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_methods
+proxy_cache_path /cache/nginx_cache levels=1:2 keys_zone=ANONYM:30m max_size=250m;
+proxy_cache_path /cache/nginx_cache_static levels=1:2 keys_zone=STATIC:30m max_size=250m;
+proxy_temp_path /cache/nginx_proxy 1 2;
+
+server {
+    {% include 'etc_nginx_server_options.conf.j2' %}
+}

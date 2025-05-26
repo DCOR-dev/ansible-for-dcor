@@ -1,0 +1,137 @@
+
+    client_max_body_size 20M;
+
+    {%  if DCOR_DEVELOP %}
+    # Avoid robots (only on development machines)
+    location = /robots.txt { return 200 "User-agent: *\nDisallow: /\n"; }
+    {% endif %}
+
+    # Block outdated versions of DCOR-Aid.
+    # This is a regexp matching unsupported DCOR-Aid versions.
+    if ($http_user_agent ~* "^DCOR-Aid/(0\.[0-9]\.|0\.1[0-5]\.|0\.16\.[0-9]\.|0\.16\.10\.)") {
+       return 400 "Client $http_user_agent outdated.";
+    }
+
+    # Avoid spamming the logs by these frequent invalid requests
+    location ~ ^(/user/reset|/userportal|/user\.action) {
+        deny all;
+    }
+
+    # file extensions that should not be used on a CKAN instance
+    location ~* \.(aspx|gif|html?|php\d?|pl|rar|sql|tar|tar.gz|zip)$ {
+      return 404;
+    }
+
+    # static/fully cached locations
+    location ~ ^/(api/i18n|base/|favicon.ico$|fonts|images/.*\.(png|jpg)$|webassets) {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_buffering on;
+        proxy_cache_key $host$scheme$proxy_host$request_uri;
+        # Use the static cache
+        proxy_cache STATIC;
+        proxy_cache_valid 200 1d;
+        proxy_cache_use_stale error timeout invalid_header updating http_500 http_502 http_503 http_504;
+        # Ignore anything CKAN or uWSGI say they are caching
+        proxy_ignore_headers Expires;
+        proxy_ignore_headers X-Accel-Expires;
+        proxy_ignore_headers Cache-Control;
+        proxy_ignore_headers Set-Cookie;
+        proxy_hide_header Expires;
+        proxy_hide_header X-Accel-Expires;
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Pragma;
+        proxy_hide_header Set-Cookie;
+        # when a client closes the connection then keep the channel to uwsgi open.
+        # Otherwise uwsgi throws an IOError and possibly segfaults.
+        proxy_ignore_client_abort on;
+    }
+
+    # GET allow-list for ckan-related directories
+    location ~ ^/($|about$|contact$|dashboard|imprint$|privacy$|revision) {
+        limit_except GET {
+              deny all;
+            }
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        # Caching based on cookies does not work since CKAN implemented
+        # the beaker `ckan` session cookie.
+        # proxy_cache ANONYM;
+        # proxy_cache_bypass $cookie_remember_token;
+        # proxy_no_cache $cookie_remember_token;
+        # proxy_cache_valid 30m;
+        # proxy_cache_key $host$scheme$proxy_host$request_uri;
+        #
+        # when a client closes the connection then keep the channel to uwsgi open.
+        # Otherwise uwsgi throws an IOError and possibly segfaults.
+        proxy_ignore_client_abort on;
+    }
+
+    # package_revise after upload
+    location = /api/3/action/package_revise {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        # Determines whether the connection with a proxied server should be closed
+        # when a client closes the connection without waiting for a response.
+        # When a client closes the connection, then keep the channel to uwsgi open.
+        # Otherwise uwsgi throws an IOError and possibly segfaults.
+        proxy_ignore_client_abort on;
+        # Package_revise can take up to 200s to complete for datasets
+        # with large uploads.
+        proxy_connect_timeout 500s;
+        proxy_read_timeout 500s;
+        proxy_send_timeout 500s;
+        keepalive_timeout 500s;
+        # Remove the Connection header if the client sends it,
+        # it could be "close" to close a keepalive connection
+        proxy_set_header Connection "";
+    }
+
+    # GET/POST allow-list for ckan-related directories
+    location ~ ^/(api/2/util/|api/3/|ckan-admin|dataset/groups|group|login_generic|organization|uploads/(admin|group|user)/.+\.(png|jpg|jpeg)$|user) {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        # Caching based on cookies does not work since CKAN implemented
+        # the beaker `ckan` session cookie.
+        # proxy_cache ANONYM;
+        # proxy_cache_bypass $cookie_remember_token;
+        # proxy_no_cache $cookie_remember_token;
+        # proxy_cache_valid 30m;
+        # proxy_cache_key $host$scheme$proxy_host$request_uri;
+        #
+        # When a client closes the connection, then keep the channel to uwsgi open.
+        # Otherwise uwsgi throws an IOError and possibly segfaults.
+        proxy_ignore_client_abort on;
+    }
+
+    # GET allow-list for ckan-related directories (separate for dataset, since
+    # we have to allow POST in `dataset/groups` (adding a dataset to a group)
+    # with higher priority above).
+    location ~ ^/(dataset) {
+        limit_except GET {
+              deny all;
+            }
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        # Caching based on cookies does not work since CKAN implemented
+        # the beaker `ckan` session cookie.
+        # proxy_cache ANONYM;
+        # proxy_cache_bypass $cookie_remember_token;
+        # proxy_no_cache $cookie_remember_token;
+        # proxy_cache_valid 30m;
+        # proxy_cache_key $host$scheme$proxy_host$request_uri;
+        #
+        # when a client closes the connection then keep the channel to uwsgi open.
+        # Otherwise uwsgi throws an IOError and possibly segfaults.
+        proxy_ignore_client_abort on;
+    }
+
+    # Redirect /UUID shortcut to /dataset/UUID
+    location ~ "^/([a-f0-9\-]{36})$" {
+        return 301 /dataset/$1;
+    }
