@@ -30,7 +30,7 @@ Make sure you can SSH into the machine with (make sure you set
 
     ssh root@192.168.122.143
 
-Create a dedicated SSH key pair and copy it to the VM like so ::
+Create a dedicated SSH key pair and copy it to the VM like so::
 
     $ ssh-keygen -t ed25519 -f ~/.ssh/id_local_vms
     $ ssh-copy-id -i ~/.ssh/id_local_vms.pub root@192.168.122.143
@@ -43,3 +43,7 @@ Add an entry to your ``~/.ssh/config`` file so that ansible can just run
         User root
         IdentityFile ~/.ssh/id_local_vms
         IdentitiesOnly yes
+
+To start the installation process, run::
+
+    ansible-playbook -i staging site.yml
