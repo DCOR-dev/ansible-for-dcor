@@ -9,10 +9,10 @@
   ansible.builtin.file:
     path: "{{ DCOR_SCRATCH_DIRECTORY }}"
     state: directory
-- name: Fetch CKAN_INI configuration from
+- name: Fetch CKAN_INI configuration from template
   set_fact:
     ckan_ini_data: "{{ lookup('template', 'ckan_ini.yml.j2') }}"
-- name: copy tomcat config files
+- name: Populate CKAN_INI configuration
   community.general.ini_file:
     path: "{{ CKAN_INI }}"
     section: "app:main"
