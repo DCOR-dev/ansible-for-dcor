@@ -33,18 +33,18 @@
     mode: '0750'
     group: 'www-data'
     owner: 'www-data'
-- name: CKAN_INI ckan.storage_path
-  community.general.ini_file:
-    path: "{{ CKAN_INI }}"
-    section: "app:main"
-    option: ckan.storage_path
-    value: "/data/ckan-{{ ansible_hostname }}"
 - name: CKAN_INI ckan.site_url
   community.general.ini_file:
     path: "{{ CKAN_INI }}"
     section: "app:main"
     option: ckan.site_url
-    value: "{{ CKAN_SITE_URL }}"
+    value: "{{ CKAN_INI_SITE_URL }}"
+- name: CKAN_INI ckan.storage_path
+  community.general.ini_file:
+    path: "{{ CKAN_INI }}"
+    section: "app:main"
+    option: ckan.storage_path
+    value: "{{ CKAN_INI_STORAGE_PATH }}"
 - name: CKAN_INI set sqlalchemy.url
   community.general.ini_file:
     path: "{{ CKAN_INI }}"

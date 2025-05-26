@@ -3,5 +3,5 @@
 [dcorservers]
 192.168.122.143
 
-[testvm]
+[localtesting]
 192.168.122.143

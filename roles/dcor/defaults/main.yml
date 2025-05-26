@@ -1,18 +1,27 @@
 CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
 
-PUBLIC_DOMAIN: "{{ inventory_hostname }}"
+DCOR_PUBLIC_DOMAIN: "{{ inventory_hostname }}"
 
 CKAN_INI: "/etc/ckan/default/ckan.ini"
 CKAN_INI_SITE_TITLE: "DCOR Base"
 CKAN_INI_SOLR_URL: "http://localhost:8983/solr/ckan"
+CKAN_INI_AUTH_CREATE_USER_VIA_API: false
+CKAN_INI_AUTH_CREATE_USER_VIA_WEB: false
 
 DCOR_SCRATCH_DIRECTORY: "/cache"
 DCOR_DEVELOP: false
 DCOR_USE_LOCAL_MINIO: false
+# We set SSL verification to True, even though this won't work with MinIO,
+# because it is a sane default.
+DCOR_HTTPS_ENABLED: true
 
 # Object storage access
-S3_ACCESS_KEY_ID: "dcor-access"
-S3_ENDPOINT_URL: "http://127.0.0.1:9000"
+DCOR_S3_ACCESS_KEY_ID: "dcor-access"
+DCOR_S3_ENDPOINT_URL: "http://127.0.0.1:9000"
+# The S3 bucket name stub is a unique prefix to the buckets created by DCOR.
+# There might be multiple DCOR instances on one S3 instance, so it should be
+# sufficiently unique.
+DCOR_S3_BUCKET_NAME_STUB: "circle-{{ inventory_hostname }}"
 # If we are using DCOR_USE_LOCAL_MINIO:
 MINIO_ROOT_USER: "minioadmin"
 MINIO_VOLUMES: "/srv/minio"

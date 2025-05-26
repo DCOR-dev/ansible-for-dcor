@@ -9,36 +9,43 @@
 # General CKAN tweaks
 ckan.site_title: {{ CKAN_INI_SITE_TITLE }}
 ckan.storage_path: {{ CKAN_INI_STORAGE_PATH }}
+# Do not publish which version we are running on
+hide_version: true
+
 
 # authorization
 ckan.auth.anon_create_dataset: false
 ckan.auth.create_unowned_dataset: false
 ckan.auth.create_dataset_if_not_in_organization: false
-ckan.auth.allow_collaborators_to_change_owner_org: false
 ckan.auth.user_create_groups: true
 ckan.auth.user_create_organizations: true
 ckan.auth.user_delete_groups: false
 ckan.auth.user_delete_organizations: false
+ckan.auth.create_user_via_api: {{ CKAN_INI_AUTH_CREATE_USER_VIA_API }}
+ckan.auth.create_user_via_web: {{ CKAN_INI_AUTH_CREATE_USER_VIA_WEB }}
 ckan.auth.roles_that_cascade_to_sub_groups: admin
 ckan.auth.public_user_details: false
+ckan.auth.public_activity_stream_detail: false
 ckan.auth.allow_dataset_collaborators: true
-ckan.auth.create_user_via_api: false
-ckan.auth.create_user_via_web: false
+ckan.auth.allow_admin_collaborators: false
+ckan.auth.allow_collaborators_to_change_owner_org: false
+ckan.auth.create_default_api_keys: false
+ckan.auth.reveal_private_datasets: false
 
 # uploads
 # only allow image types for user avatars and group images
-# (introduced in CKAN 2.9.5)
 ckan.upload.user.types: image
 ckan.upload.group.types: image
 
 # DCOR object storage via S3
-dcor_object_store.access_key_id: {{ S3_ACCESS_KEY_ID }}
-dcor_object_store.secret_access_key: {{ S3_SECRET_ACCESS_KEY }}
-dcor_object_store.endpoint_url: {{ S3_ENDPOINT_URL }}
-dcor_object_store.ssl_verify: true
+dcor_object_store.access_key_id: {{ DCOR_S3_ACCESS_KEY_ID }}
+dcor_object_store.secret_access_key: {{ DCOR_S3_SECRET_ACCESS_KEY }}
+dcor_object_store.endpoint_url: {{ DCOR_S3_ENDPOINT_URL }}
+dcor_object_store.ssl_verify: {{ DCOR_HTTPS_ENABLED }}
 # The bucket name is by default defined by the circle ID. Resources
-# are stored in the "RES/OUR/CEID-SCHEME" in that bucket.
-dcor_object_store.bucket_name: circle-{organization_id}
+# are stored in the "RES/OUR/CEID-SCHEME" in that bucket. The part
+# "{organization_id}" is a template used in DCOR [sic] and is not replaced here.
+dcor_object_store.bucket_name: {{ DCOR_S3_BUCKET_NAME_STUB }}-{organization_id}
 
 # postgresql
 sqlalchemy.url: postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@localhost/{{ POSTGRESQL_CKAN_DATABASE }}
@@ -63,6 +70,7 @@ ckan.webassets.path: /var/lib/ckan/webassets
 # Default for local installation is http://localhost:8983/solr/ckan
 solr_url: {{ CKAN_INI_SOLR_URL }}
 
+
 # ckanex-dcor_depot (used for caching e.g. figshare data)
 ckanext.dcor_depot.tmp_dir: /cache/ckanext-dcor_depot
 
@@ -76,30 +84,36 @@ ckanext.dcor_schemas.allow_content_listing_for_anon: true
 ckanext.dcor_schemas.allow_public_datasets: true
 ckanext.dcor_schemas.json_resource_schema_dir: package
 
+
+# licenses path
+licenses_group_url: file://<TEMPLATE:DCOR_SCHEMAS_PATH>/licenses.json
+
+
+# CRSF protection
+WTF_CSRF_ENABLED: true
+WTF_CSRF_CHECK_DEFAULT: true
+WTF_CSRF_SECRET_KEY: {{ CKAN_INI_WTF_CSRF_SECRET_KEY }}
 # enforce CSRF protection for all extensions
 ckan.csrf_protection.ignore_extensions: false
 
 
 # general ckan session cookies
+SESSION_TYPE: cookie
+SESSION_COOKIE_NAME: dcor
+SESSION_COOKIE_DOMAIN: {{ DCOR_PUBLIC_DOMAIN }}
+SESSION_COOKIE_HTTPONLY: true
+SESSION_COOKIE_SECURE: {{ DCOR_HTTPS_ENABLED }}
+SESSION_COOKIE_SAMESITE: Strict
 # 90 days validity
-beaker.session.cookie_expires: 7776000
-beaker.session.crypto_type: cryptography
-# Optimal would be "json", but there were issues with `datetime`
-# objects that could not be jsonified.
-beaker.session.domain: {{ PUBLIC_DOMAIN }}
-beaker.session.data_serializer: pickle
-beaker.session.httponly: true
-beaker.session.samesite: Strict
-beaker.session.secure: true
-beaker.session.type: cookie
+PERMANENT_SESSION_LIFETIME: 7776000
+SESSION_REFRESH_EACH_REQUEST: false
 
-# licenses path
-licenses_group_url: file://<TEMPLATE:DCOR_SCHEMAS_PATH>/licenses.json
 
-# flask login session cookies
+# Flask-Login Remember me cookie settings
 REMEMBER_COOKIE_NAME: remember_token
 # 90 days validity
 REMEMBER_COOKIE_DURATION: 7776000
+REMEMBER_COOKIE_DOMAIN: {{ DCOR_PUBLIC_DOMAIN }}
 REMEMBER_COOKIE_SECURE: true
 REMEMBER_COOKIE_HTTPONLY: true
 REMEMBER_COOKIE_SAMESITE: Strict
