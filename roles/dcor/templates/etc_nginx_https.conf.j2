@@ -13,6 +13,7 @@ server {
     ssl_certificate_key "{{ SSL_CERTIFICATE_PRIVATE }}";
 
     {% include 'etc_nginx_server_options.conf.j2' %}
+
 }
 
 # Redirect all traffic to SSL

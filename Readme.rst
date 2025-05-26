@@ -19,3 +19,8 @@ The following roles are available:
 - common: General administrative tasks like unattended-upgrades
 - ckan: Install CKAN with all its dependencies (including postgresql and Solr)
 - dcor: Install DCOR on top of an existing CKAN installation
+
+Notes:
+
+- The playbooks do not touch the redis or postgresql databases. Only access
+  credentials are modified.

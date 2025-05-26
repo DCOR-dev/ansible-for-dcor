@@ -26,6 +26,10 @@
 - name: Install CKAN
   ansible.builtin.apt:
     deb: "{{ ANSIBLE_DOWNLOAD_DIR }}{{ CKAN_DEB_NAME }}"
+- name: Make sure nginx is not running
+  systemd:
+    name: nginx
+    state: stopped
 - name: Create CKAN_INI_STORAGE_PATH directory
   ansible.builtin.file:
     path: "{{ CKAN_INI_STORAGE_PATH }}"

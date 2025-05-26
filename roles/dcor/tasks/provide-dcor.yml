@@ -1,3 +1,7 @@
+- name: Make sure nginx is not running
+  systemd:
+    name: nginx
+    state: stopped
 - name: Install Python tools
   ansible.builtin.apt:
     name:
