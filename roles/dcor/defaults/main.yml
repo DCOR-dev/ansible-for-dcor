@@ -1,13 +1,24 @@
 CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
-CKAN_INI_FILE: "/etc/ckan/default/ckan.ini"
+
+PUBLIC_DOMAIN: "{{ inventory_hostname }}"
+
+CKAN_INI: "/etc/ckan/default/ckan.ini"
+CKAN_INI_SITE_TITLE: "DCOR Base"
+CKAN_INI_SOLR_URL: "http://localhost:8983/solr/ckan"
 
 DCOR_SCRATCH_DIRECTORY: "/cache"
-
-DCOR_SITE_CONFIG_DIR: ""
 DCOR_DEVELOP: false
-DCOR_USE_MINIO: false
+DCOR_USE_LOCAL_MINIO: false
 
+# Object storage access
+S3_ACCESS_KEY_ID: "dcor-access"
+S3_ENDPOINT_URL: "http://127.0.0.1:9000"
+# If we are using DCOR_USE_LOCAL_MINIO:
+MINIO_ROOT_USER: "minioadmin"
 MINIO_VOLUMES: "/srv/minio"
+
+POSTGRESQL_CKAN_USER: "ckan_default"
+POSTGRESQL_CKAN_DATABASE: "ckan_default"
 
 # https://dl.min.io/server/minio/release/linux-amd64/archive/
 MINIO_SERVER_VERSION: "20250422221226.0.0"

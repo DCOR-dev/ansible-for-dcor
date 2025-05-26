@@ -26,28 +26,28 @@
 - name: Install CKAN
   ansible.builtin.apt:
     deb: "{{ ANSIBLE_DOWNLOAD_DIR }}{{ CKAN_DEB_NAME }}"
-- name: Create CKAN_STORAGE_PATH directory
+- name: Create CKAN_INI_STORAGE_PATH directory
   ansible.builtin.file:
-    path: "{{ CKAN_STORAGE_PATH }}"
+    path: "{{ CKAN_INI_STORAGE_PATH }}"
     state: directory
     mode: '0750'
     group: 'www-data'
     owner: 'www-data'
-- name: CKAN_INI_FILE ckan.storage_path
+- name: CKAN_INI ckan.storage_path
   community.general.ini_file:
-    path: "{{ CKAN_INI_FILE }}"
+    path: "{{ CKAN_INI }}"
     section: "app:main"
     option: ckan.storage_path
     value: "/data/ckan-{{ ansible_hostname }}"
-- name: CKAN_INI_FILE ckan.site_url
+- name: CKAN_INI ckan.site_url
   community.general.ini_file:
-    path: "{{ CKAN_INI_FILE }}"
+    path: "{{ CKAN_INI }}"
     section: "app:main"
     option: ckan.site_url
     value: "{{ CKAN_SITE_URL }}"
-- name: CKAN_INI_FILE set sqlalchemy.url
+- name: CKAN_INI set sqlalchemy.url
   community.general.ini_file:
-    path: "{{ CKAN_INI_FILE }}"
+    path: "{{ CKAN_INI }}"
     section: "app:main"
     option: sqlalchemy.url
     value: "postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@localhost/{{ POSTGRESQL_CKAN_DATABASE }}"
@@ -58,13 +58,13 @@
       source {{ CKAN_ENVIRONMENT_ACTIVATE }}
       ckan db init
   environment:
-    CKAN_INI: "{{ CKAN_INI_FILE }}"
+    CKAN_INI: "{{ CKAN_INI }}"
 - name: Reload nginx
   ansible.builtin.service:
     name: nginx
     state: reloaded
     enabled: true
-- name: Restart supervisor
+- name: Restart CKAN via supervisor
   community.general.supervisorctl:
     name: all
     state: restarted

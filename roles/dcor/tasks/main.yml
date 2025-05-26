@@ -1,3 +1,3 @@
 - include_tasks: provide-minio.yml
-  when: DCOR_USE_MINIO | bool
+  when: DCOR_USE_LOCAL_MINIO | bool
 - include_tasks: provide-dcor.yml

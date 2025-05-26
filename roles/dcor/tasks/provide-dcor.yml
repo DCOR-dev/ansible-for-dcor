@@ -9,43 +9,49 @@
   ansible.builtin.file:
     path: "{{ DCOR_SCRATCH_DIRECTORY }}"
     state: directory
-- name: CKAN_INI_FILE set dcor_object_store.access_key_id
+- name: Fetch CKAN_INI configuration from
+  set_fact:
+    ckan_ini_data: "{{ lookup('template', 'ckan_ini.yml.j2') }}"
+- name: copy tomcat config files
   community.general.ini_file:
-    path: "{{ CKAN_INI_FILE }}"
+    path: "{{ CKAN_INI }}"
     section: "app:main"
-    option: dcor_object_store.access_key_id
-    value: "{{ S3_ACCESS_KEY_ID }}"
-- name: CKAN_INI_FILE set dcor_object_store.secret_access_key
-  community.general.ini_file:
-    path: "{{ CKAN_INI_FILE }}"
-    section: "app:main"
-    option: dcor_object_store.secret_access_key
-    value: "{{ S3_SECRET_ACCESS_KEY }}"
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_items:
+    - "{{ ckan_ini_data | from_yaml | dict2items }}"
 - name: Install DCOR
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: | 
+    cmd: |
       source {{ CKAN_ENVIRONMENT_ACTIVATE }}
       pip install --upgrade pip
       pip install --upgrade wheel
       pip install --upgrade dcor_control
   environment:
-    CKAN_INI: "{{ CKAN_INI_FILE }}"
+    CKAN_INI: "{{ CKAN_INI }}"
+- name: Restart CKAN via supervisor
+  community.general.supervisorctl:
+    name: all
+    state: restarted
 - name: Run dcor develop
   when: DCOR_DEVELOP | bool == true
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: | 
+    cmd: |
       source {{ CKAN_ENVIRONMENT_ACTIVATE }}
       dcor develop --yes
   environment:
-    CKAN_INI: "{{ CKAN_INI_FILE }}"
+    CKAN_INI: "{{ CKAN_INI }}"
 - name: Run dcor inspect
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: | 
+    cmd: |
       source {{ CKAN_ENVIRONMENT_ACTIVATE }}
       dcor inspect --assume-yes
   environment:
-    CKAN_INI: "{{ CKAN_INI_FILE }}"
-    DCOR_SITE_CONFIG_DIR: "{{ DCOR_SITE_CONFIG_DIR }}"
+    CKAN_INI: "{{ CKAN_INI }}"
+#- name: Remove default CKAN nginx configuration
+
+#- name: Add DCOR nginx configuration
+

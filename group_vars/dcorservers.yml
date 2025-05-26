@@ -1,0 +1,2 @@
+CKAN_SITE_URL: "http://{{ inventory_hostname }}"
+CKAN_INI_STORAGE_PATH: "/data"

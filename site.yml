@@ -1,5 +1,6 @@
 - hosts: dcorservers
   roles:
     - common
+    - secrets
     - ckan
     - dcor

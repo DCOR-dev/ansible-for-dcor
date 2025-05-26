@@ -1,7 +1,9 @@
 CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
-CKAN_INI_FILE: "/etc/ckan/default/ckan.ini"
+CKAN_INI: "/etc/ckan/default/ckan.ini"
 
-CKAN_STORAGE_PATH: "/var/lib/ckan/default"
+CKAN_INI_STORAGE_PATH: "/var/lib/ckan/default"
+CKAN_INI_SOLR_URL: "http://localhost:8983/solr/ckan"
+
 CKAN_MAJOR_VERSION: "2"
 CKAN_MINOR_VERSION: "2.11"
 CKAN_PATCH_VERSION: "2.11.3"
