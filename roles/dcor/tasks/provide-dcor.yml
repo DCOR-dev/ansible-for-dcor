@@ -100,6 +100,11 @@
 # UWSGI together with `SIGTERM` (normal behavior in supervisor) instead of
 # sending `QUIT` (default workaround in CKAN supervisor config) solved this:
 # https://github.com/unbit/uwsgi/issues/296#issuecomment-65894116
+- name: Stop CKAN via supervisor
+  community.general.supervisorctl:
+    name: all
+    state: stopped
+
 - name: Ensure supervisor sends SIGTERM to UWSGI
   ansible.builtin.lineinfile:
     path: /etc/supervisor/conf.d/ckan-uwsgi.conf
