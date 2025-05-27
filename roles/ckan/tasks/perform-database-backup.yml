@@ -5,19 +5,20 @@
     mode: '0771'
     owner: 'root'
     group: 'root'
-- name: Create backup directory
-  ansible.builtin.file:
-    path: "/backups/postgresql/"
-    state: directory
-    mode: '0770'
-    owner: 'postgres'
-    group: 'root'
 - name: Check whether postgresql is available
   become: true
   become_user: postgres
   community.postgresql.postgresql_info:
   register: db_info
   ignore_errors: true
+- name: Create backup directory
+  when: db_info.databases is defined and POSTGRESQL_CKAN_DATABASE in db_info.databases
+  ansible.builtin.file:
+    path: "/backups/postgresql/"
+    state: directory
+    mode: '0770'
+    owner: 'postgres'
+    group: 'root'
 - name: Create backup of database
   when: db_info.databases is defined and POSTGRESQL_CKAN_DATABASE in db_info.databases
   become: true
@@ -27,6 +28,7 @@
     state: dump
     target: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}.sql"
 - name: Remove all but the latest 100 dumps
+  when: db_info.databases is defined and POSTGRESQL_CKAN_DATABASE in db_info.databases
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
