@@ -55,6 +55,10 @@
       dcor inspect --assume-yes
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
+- name: Install mailx for automated emails
+  when: EMAIL_SMTP_SERVER != ""
+  ansible.builtin.apt:
+    name: bsd-mailx
 - name: Remove default CKAN nginx configuration
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/ckan

@@ -1,12 +1,23 @@
 CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
 
-DCOR_PUBLIC_DOMAIN: "{{ inventory_hostname }}"
+FULLY_QUALIFIED_DOMAIN_NAME: "{{ inventory_hostname }}"
 
 CKAN_INI: "/etc/ckan/default/ckan.ini"
 CKAN_INI_SITE_TITLE: "DCOR Base"
 CKAN_INI_SOLR_URL: "http://localhost:8983/solr/ckan"
 CKAN_INI_AUTH_CREATE_USER_VIA_API: false
 CKAN_INI_AUTH_CREATE_USER_VIA_WEB: false
+
+# Email configuration
+EMAIL_SMTP_SERVER: ""
+EMAIL_SMTP_STARTTLS: true
+EMAIL_SMTP_TLS: true
+EMAIL_SMTP_USER: ""
+EMAIL_SMTP_PASSWORD: ""
+EMAIL_SMTP_MAIL_FROM: "noreply-dcor@{{ FULLY_QUALIFIED_DOMAIN_NAME }}"
+EMAIL_SMTP_REPLY_TO: ""
+CKAN_INI_EMAIL_TO: "{{ MAINTAINER_EMAIL }}"
+CKAN_INI_ERROR_EMAIL_FROM: "error-dcor@{{ FULLY_QUALIFIED_DOMAIN_NAME }}"
 
 DCOR_SCRATCH_DIRECTORY: "/cache"
 DCOR_DEVELOP: false

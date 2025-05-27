@@ -1,1 +1,9 @@
 MAINTAINER_EMAIL: "maintainer@example.com"
+FULLY_QUALIFIED_DOMAIN_NAME: "{{ inventory_hostname }}"
+
+# Email configuration
+EMAIL_SMTP_SERVER: ""
+EMAIL_SMTP_STARTTLS: true
+EMAIL_SMTP_TLS: true
+EMAIL_SMTP_USER: ""
+EMAIL_SMTP_PASSWORD: ""

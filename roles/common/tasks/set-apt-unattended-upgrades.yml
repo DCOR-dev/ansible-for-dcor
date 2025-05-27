@@ -6,3 +6,17 @@
     unattended_automatic_reboot: true
     unattended_automatic_reboot_time: "02:00"
     unattended_mail_report: "{{ MAINTAINER_EMAIL }}"
+- name: Install mailx and ssmtp for email notification
+  when: EMAIL_SMTP_SERVER != ""
+  ansible.builtin.apt:
+    name:
+    - bsd-mailx
+    - ssmtp
+- name: Setup email credentials
+  when: EMAIL_SMTP_SERVER != ""
+  ansible.builtin.template:
+    src: "etc_ssmtp.conf.j2"
+    dest: /etc/ssmtp/ssmtp.conf
+    owner: root
+    group: mail
+    mode: '0640'

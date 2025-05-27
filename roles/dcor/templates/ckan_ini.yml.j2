@@ -8,7 +8,7 @@
 
 # General CKAN tweaks
 ckan.site_title: {{ CKAN_INI_SITE_TITLE }}
-ckan.site_url: {{ 'https' if DCOR_HTTPS_ENABLED else 'http' }}://{{ DCOR_PUBLIC_DOMAIN }}
+ckan.site_url: {{ 'https' if DCOR_HTTPS_ENABLED else 'http' }}://{{ FULLY_QUALIFIED_DOMAIN_NAME }}
 ckan.storage_path: {{ CKAN_INI_STORAGE_PATH }}
 # Do not publish which version we are running on
 hide_version: true
@@ -101,7 +101,7 @@ ckan.csrf_protection.ignore_extensions: false
 # general ckan session cookies
 SESSION_TYPE: cookie
 SESSION_COOKIE_NAME: dcor
-SESSION_COOKIE_DOMAIN: {{ DCOR_PUBLIC_DOMAIN }}
+SESSION_COOKIE_DOMAIN: {{ FULLY_QUALIFIED_DOMAIN_NAME }}
 SESSION_COOKIE_HTTPONLY: true
 SESSION_COOKIE_SECURE: {{ DCOR_HTTPS_ENABLED }}
 SESSION_COOKIE_SAMESITE: Strict
@@ -114,7 +114,18 @@ SESSION_REFRESH_EACH_REQUEST: false
 REMEMBER_COOKIE_NAME: remember_token
 # 90 days validity
 REMEMBER_COOKIE_DURATION: 7776000
-REMEMBER_COOKIE_DOMAIN: {{ DCOR_PUBLIC_DOMAIN }}
+REMEMBER_COOKIE_DOMAIN: {{ FULLY_QUALIFIED_DOMAIN_NAME }}
 REMEMBER_COOKIE_SECURE: true
 REMEMBER_COOKIE_HTTPONLY: true
 REMEMBER_COOKIE_SAMESITE: Strict
+
+
+# Email settings
+smtp.server: {{ EMAIL_SMTP_SERVER }}
+smtp.starttls: {{ EMAIL_SMTP_STARTTLS }}
+smtp.user: {{ EMAIL_SMTP_USER }}
+smtp.password: {{ EMAIL_SMTP_PASSWORD }}
+smtp.mail_from: {{ EMAIL_SMTP_MAIL_FROM }}
+smtp.reply_to: {{ EMAIL_SMTP_REPLY_TO }}
+email_to: {{ CKAN_INI_EMAIL_TO }}
+error_email_from: {{ CKAN_INI_ERROR_EMAIL_FROM }}

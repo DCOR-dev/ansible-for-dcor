@@ -1,2 +1,2 @@
 CKAN_INI_STORAGE_PATH: "/data"
-DCOR_PUBLIC_DOMAIN: "{{ inventory_hostname }}"
+FULLY_QUALIFIED_DOMAIN_NAME: "{{ inventory_hostname }}"
