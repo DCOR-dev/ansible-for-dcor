@@ -1,0 +1,71 @@
+[uwsgi]
+
+; Since we are behind a webserver (proxy), we use the socket variant.
+; We use HTTP1.1 (keep-alives)
+http11-socket          =  127.0.0.1:8080
+uid                    =  www-data
+gid                    =  www-data
+wsgi-file              =  /etc/ckan/default/wsgi.py
+virtualenv             =  {{ CKAN_ENVIRONMENT_DIRECTORY }}
+module                 =  wsgi:application
+master                 =  true
+pidfile                =  /tmp/%n.pid
+; increase for long-lasting data queries
+harakiri               =  500
+harakiri-verbose       =  true
+; Restart workers after this many requests
+max-requests           =  1000
+; How long to wait before forcefully killing workers
+worker-reload-mercy    =  30
+; Restart workers after this much resident memory
+reload-on-rss          =  2048
+; Restart workers after this many seconds
+max-worker-lifetime    =  3600
+; Delete sockets during shutdown
+vacuum                 =  true
+callable               =  application
+; Disable threads only if not using threads and performance is critical
+enable-threads         =  false
+; Do not use multiple interpreters (since we only have one service)
+single-interpreter     =  true
+; Shutdown when receiving SIGTERM
+die-on-term            =  true
+; Fail to start if application cannot load
+need-app               =  true
+; Make sure all options in this file exist.
+strict                 =  true
+
+; Buffer size for requests (trade-off between security and long requests with cookies)
+buffer-size            =  32768
+
+; Reduce or increase this number to limit POST requests. By default,
+; the size of POST requests is unlimited.
+limit-post             =  5242880
+
+; Set the number of workers to something > 1, otherwise
+; only one client can connect via nginx to uWSGI at a time.
+workers                =  {{ UWSGI_NUM_WORKERS }}
+; Use lazy apps to avoid the `__Global` error.
+; See https://github.com/ckan/ckan/issues/5933#issuecomment-809114593
+lazy-apps              =  true
+
+; Timeout for communication socket connection
+socket-timeout         =  500
+
+; Custom logging
+; disable logging in general (files easily get above 50MB)
+disable-logging        =  true
+; enable logging for a few specific cases
+log-4xx                =  true
+log-5xx                =  true
+log-ioerror            =  true
+; set the log format to match that of CKAN
+log-date               =  %%Y-%%m-%%d %%H:%%M:%%S
+logformat-strftime     =  true
+logformat              =  %(ftime) uWSGI %(addr) (%(proto) %(status)) %(method) %(uri) => %(size) bytes in %(msecs) msecs to %(uagent)
+threaded-logger        =  true
+
+; https://stumbles.id.au/how-to-fix-uwsgi-oserror-write-error.html
+disable-write-exception = true
+ignore-write-errors     = true
+ignore-sigpipe          = true
