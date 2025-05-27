@@ -30,4 +30,4 @@
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
-      find /backups/postgresql/ -type f | sort -r | awk 'NR>100' | xargs rm
+      find /backups/postgresql/ -type f | sort -r | awk 'NR>100' | xargs --no-run-if-empty rm
