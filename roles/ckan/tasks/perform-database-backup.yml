@@ -26,3 +26,8 @@
     name: "{{ POSTGRESQL_CKAN_DATABASE }}"
     state: dump
     target: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}.sql"
+- name: Remove all but the latest 100 dumps
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      find /backups/postgresql/ -type f | sort -r | awk 'NR>100' | xargs rm
