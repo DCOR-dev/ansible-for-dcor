@@ -20,3 +20,12 @@
     owner: root
     group: mail
     mode: '0640'
+- name: Install needrestart for automated reboots
+  ansible.builtin.apt:
+    name: needrestart
+- name: Configure needrestart to automatically reboot
+  ansible.builtin.copy:
+    dest: /etc/needrestart/conf.d/restart_mode_automatic.conf
+    content: |
+      # Set restart mode to automatic
+      "$nrconf{restart} = 'a';"
