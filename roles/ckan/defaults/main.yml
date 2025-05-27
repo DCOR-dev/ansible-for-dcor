@@ -12,6 +12,7 @@ CKAN_DEB_MD5: "e8fcc52f89dccf311fbe902361becd40"
 
 ANSIBLE_DOWNLOAD_DIR: "/root/ansible_downloads/"
 
+POSTGRESQL_CKAN_HOST: "localhost"
 POSTGRESQL_CKAN_USER: "ckan_default"
 POSTGRESQL_CKAN_DATABASE: "ckan_default"
 

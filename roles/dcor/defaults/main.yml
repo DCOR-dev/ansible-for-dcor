@@ -41,6 +41,7 @@ DCOR_S3_BUCKET_NAME_STUB: "circle-{{ inventory_hostname }}"
 MINIO_ROOT_USER: "minioadmin"
 MINIO_VOLUMES: "/srv/minio"
 
+POSTGRESQL_CKAN_HOST: "localhost"
 POSTGRESQL_CKAN_USER: "ckan_default"
 POSTGRESQL_CKAN_DATABASE: "ckan_default"
 

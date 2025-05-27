@@ -49,7 +49,7 @@ dcor_object_store.ssl_verify: {{ DCOR_HTTPS_ENABLED }}
 dcor_object_store.bucket_name: {{ DCOR_S3_BUCKET_NAME_STUB }}-{organization_id}
 
 # postgresql
-sqlalchemy.url: postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@localhost/{{ POSTGRESQL_CKAN_DATABASE }}
+sqlalchemy.url: postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@{{ POSTGRESQL_CKAN_HOST }}/{{ POSTGRESQL_CKAN_DATABASE }}
 
 # search
 ckan.search.default_include_private: true

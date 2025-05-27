@@ -48,7 +48,7 @@
     path: "{{ CKAN_INI }}"
     section: "app:main"
     option: sqlalchemy.url
-    value: "postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@localhost/{{ POSTGRESQL_CKAN_DATABASE }}"
+    value: "postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@{{ POSTGRESQL_CKAN_HOST }}/{{ POSTGRESQL_CKAN_DATABASE }}"
 - name: Initialize/Upgrade CKAN database
   ansible.builtin.shell:
     executable: /bin/bash
