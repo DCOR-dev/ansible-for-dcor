@@ -2,6 +2,7 @@
   systemd:
     name: nginx
     state: stopped
+
 - name: Install Python tools
   ansible.builtin.apt:
     name:
@@ -9,13 +10,16 @@
     - python3-dev
     - python3-venv
     - build-essential
+
 - name: Create scratch directory
   ansible.builtin.file:
     path: "{{ DCOR_SCRATCH_DIRECTORY }}"
     state: directory
+
 - name: Fetch CKAN_INI configuration from template
   set_fact:
     ckan_ini_data: "{{ lookup('template', 'ckan_ini.yml.j2') }}"
+
 - name: Populate CKAN_INI configuration
   community.general.ini_file:
     path: "{{ CKAN_INI }}"
@@ -24,6 +28,7 @@
     value: "{{ item.value }}"
   with_items:
     - "{{ ckan_ini_data | from_yaml | dict2items }}"
+
 - name: Install DCOR
   ansible.builtin.shell:
     executable: /bin/bash
@@ -34,6 +39,7 @@
       pip install {{ "--upgrade" if DCOR_DEVELOP | bool == false }} dcor_control
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
+
 - name: Run dcor develop
   when: DCOR_DEVELOP | bool == true
   ansible.builtin.shell:
@@ -43,6 +49,7 @@
       dcor develop --yes
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
+
 - name: Run dcor inspect
   ansible.builtin.shell:
     executable: /bin/bash
@@ -51,14 +58,17 @@
       dcor inspect --assume-yes
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
+
 - name: Install mailx for automated emails
   when: EMAIL_SMTP_SERVER != ""
   ansible.builtin.apt:
     name: bsd-mailx
+
 - name: Remove default CKAN nginx configuration
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/ckan
     state: absent
+
 - name: Add DCOR nginx configuration
   ansible.builtin.template:
     # Depending on whether HTTPS is enabled or not, a different config is used.
@@ -67,11 +77,13 @@
     owner: root
     group: root
     mode: '0644'
+
 - name: Enable DCOR nginx configuration
   file:
     src: /etc/nginx/sites-available/dcor
     dest: /etc/nginx/sites-enabled/dcor
     state: link
+
 - name: Add DCOR UWSGI configuration
   ansible.builtin.template:
     # Depending on whether HTTPS is enabled or not, a different config is used.
@@ -80,6 +92,7 @@
     owner: root
     group: root
     mode: '0644'
+
 # There has been a lot of fuss about UWSGI and supervisor not working together
 # properly. There could be a conflict about child UWSGI processes still being
 # around and not cleaned up. I had a deadlock where the supervisor process
@@ -92,21 +105,25 @@
     path: /etc/supervisor/conf.d/ckan-uwsgi.conf
     regexp: '^stopsignal=QUIT'
     line: ";stopsignal=QUIT"
+
 - name: Ensure supervisor sends SIGTERM to datapusher
   ansible.builtin.lineinfile:
     path: /etc/supervisor/conf.d/ckan-datapusher.conf
     regexp: '^stopsignal=QUIT'
     line: ";stopsignal=QUIT"
+
 - name: Ensure "die-on-term" is set for datapusher
   community.general.ini_file:
     path: /etc/ckan/datapusher/datapusher-uwsgi.ini
     section: uwsgi
     option: die-on-term
     value: true
+
 - name: Restart CKAN via supervisor
   community.general.supervisorctl:
     name: all
     state: restarted
+
 - name: Reload nginx
   systemd:
     name: nginx

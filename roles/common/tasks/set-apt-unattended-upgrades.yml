@@ -6,12 +6,14 @@
     unattended_automatic_reboot: true
     unattended_automatic_reboot_time: "02:00"
     unattended_mail_report: "{{ MAINTAINER_EMAIL }}"
+
 - name: Install mailx and ssmtp for email notification
   when: EMAIL_SMTP_SERVER != ""
   ansible.builtin.apt:
     name:
     - bsd-mailx
     - ssmtp
+
 - name: Setup email credentials
   when: EMAIL_SMTP_SERVER != ""
   ansible.builtin.template:
@@ -20,9 +22,11 @@
     owner: root
     group: mail
     mode: '0640'
+
 - name: Install needrestart for automated reboots
   ansible.builtin.apt:
     name: needrestart
+
 - name: Configure needrestart to automatically reboot
   ansible.builtin.copy:
     dest: /etc/needrestart/conf.d/restart_mode_automatic.conf

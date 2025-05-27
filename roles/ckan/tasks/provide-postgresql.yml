@@ -17,6 +17,7 @@
     - python3-psycopg2
     - libpq5
     state: latest
+
 - name: Create ckan_default user
   # sudo -u postgres createuser -S -D -R -P ckan_default
   become: true
@@ -25,6 +26,7 @@
     name: "{{ POSTGRESQL_CKAN_USER }}"
     password: "{{ POSTGRESQL_CKAN_PASSWORD }}"
     role_attr_flags: NOCREATEDB,NOSUPERUSER,NOCREATEROLE
+
 - name: Create ckan database
   # sudo -u postgres createdb -O ckan_default ckan_default -E utf-8
   become: true

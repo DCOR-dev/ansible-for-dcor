@@ -9,27 +9,28 @@
     - python3-venv
     - build-essential
     state: latest
-- name: Install other requirements
-  ansible.builtin.apt:
-    name: wget
-    state: latest
+
 - name: Create install directory
   ansible.builtin.file:
     path: "{{ ANSIBLE_DOWNLOAD_DIR }}"
     state: directory
+
 - name: Download CKAN
   ansible.builtin.get_url:
     url: "https://packaging.ckan.org/{{ CKAN_DEB_NAME  }}"
     dest: "{{ ANSIBLE_DOWNLOAD_DIR }}{{ CKAN_DEB_NAME }}"
     checksum: md5:{{ CKAN_DEB_MD5 }}
     mode: '0400'
+
 - name: Install CKAN
   ansible.builtin.apt:
     deb: "{{ ANSIBLE_DOWNLOAD_DIR }}{{ CKAN_DEB_NAME }}"
+
 - name: Make sure nginx is not running
   systemd:
     name: nginx
     state: stopped
+
 - name: Create CKAN_INI_STORAGE_PATH directory
   ansible.builtin.file:
     path: "{{ CKAN_INI_STORAGE_PATH }}"
@@ -37,18 +38,21 @@
     mode: '0750'
     group: 'www-data'
     owner: 'www-data'
+
 - name: CKAN_INI ckan.storage_path
   community.general.ini_file:
     path: "{{ CKAN_INI }}"
     section: "app:main"
     option: ckan.storage_path
     value: "{{ CKAN_INI_STORAGE_PATH }}"
+
 - name: CKAN_INI set sqlalchemy.url
   community.general.ini_file:
     path: "{{ CKAN_INI }}"
     section: "app:main"
     option: sqlalchemy.url
     value: "postgresql://{{ POSTGRESQL_CKAN_USER }}:{{ POSTGRESQL_CKAN_PASSWORD }}@{{ POSTGRESQL_CKAN_HOST }}/{{ POSTGRESQL_CKAN_DATABASE }}"
+
 - name: Initialize/Upgrade CKAN database
   ansible.builtin.shell:
     executable: /bin/bash
@@ -57,12 +61,33 @@
       ckan db init
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
+
 - name: Reload nginx
   ansible.builtin.service:
     name: nginx
     state: reloaded
     enabled: true
+
 - name: Restart CKAN via supervisor
   community.general.supervisorctl:
     name: all
     state: restarted
+
+- block:
+    - name: Create override directory for Solr systemd
+      ansible.builtin.file:
+        owner: root
+        group: root
+        mode: 0755
+        path: /etc/systemd/system/supervisor.service.d
+        state: directory
+    - name: deploy supervisor override for Solr systemd
+      ansible.builtin.template:
+        src: systemd_supervisor-override.conf.j2
+        dest: /etc/systemd/system/supervisor.service.d/override.conf
+        group: root
+        owner: root
+        mode: 0644
+    - name: Tell systemd to reread configs
+      ansible.builtin.systemd:
+        daemon_reload: true

@@ -2,18 +2,20 @@
   ansible.builtin.apt:
     name: openjdk-11-jdk-headless
     state: latest
+
 - name: make sure tomcat and Solr are not installed via apt
   ansible.builtin.apt:
     name:
       - tomcat9
       - solr-tomcat
     state: absent
+
 - name: Is the correct version of Solr already installed?
   ansible.builtin.shell: "/opt/solr/bin/solr --version"
   register: solr_vd
   ignore_errors: true
+
 - name: Remove Solr if it does not match the specified version
-  when: solr_vd.rc == 0 and SOLR_VERSION not in solr_vd.stdout
   ansible.builtin.shell:
     cmd: |
       systemctl stop solr
@@ -28,47 +30,56 @@
       deluser --remove-home solr
       deluser --group solr
       update-rc.d -f solr remove
-- name: Install Solr
-  when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
-  tasks:
+  when: solr_vd.rc == 0 and SOLR_VERSION not in solr_vd.stdout
+
+- block:
     - name: Create install directory
       ansible.builtin.file:
         path: "{{ ANSIBLE_DOWNLOAD_DIR }}"
         state: directory
+
     - name: Download Solr
       ansible.builtin.get_url:
         url: "https://www.apache.org/dyn/closer.lua/solr/solr/{{ SOLR_VERSION }}/solr-{{ SOLR_VERSION }}.tgz?action=download"
         dest: "{{ ANSIBLE_DOWNLOAD_DIR }}solr-{{ SOLR_VERSION }}.tgz"
         checksum: sha512:{{ SOLR_INSTALLER_SHA512 }}
         mode: '0400'
+
     - name: Extract the installer script
       ansible.builtin.shell:
         chdir: "{{ ANSIBLE_DOWNLOAD_DIR }}"
         cmd: "tar xzf {{ ANSIBLE_DOWNLOAD_DIR }}solr-{{ SOLR_VERSION }}.tgz solr-{{ SOLR_VERSION }}/bin/install_solr_service.sh --strip-components=2"
+
     - name: Install Solr
       ansible.builtin.shell:
         chdir: "{{ ANSIBLE_DOWNLOAD_DIR }}"
         cmd: "bash ./install_solr_service.sh solr-{{ SOLR_VERSION }}.tgz"
+
     - name: Make sure Solr started
       ansible.builtin.service:
         name: solr
         state: started
         enabled: yes
+
     - name: Create a new core for Solr
       become: true
       become_user: solr
       ansible.builtin.shell:
         cmd: /opt/solr/bin/solr create -c ckan
+
     - name: Replace Solr schema with CKAN's
       become: true
       become_user: solr
       ansible.builtin.get_url:
         url: "https://raw.githubusercontent.com/ckan/ckan/dev-v{{ CKAN_MINOR_VERSION }}/ckan/config/solr/schema.xml"
         dest: "/var/solr/data/ckan/conf/managed-schema.xml"
+
     - name: Restart Solr
       ansible.builtin.service:
         name: solr
         state: restarted
+  when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
+
 - name: Make sure Solr is reachable
   ansible.builtin.uri:
     url: http://localhost:8983/solr

@@ -11,25 +11,24 @@
   community.postgresql.postgresql_info:
   register: db_info
   ignore_errors: true
-- name: Create backup directory
+- block:
+    - name: Create backup directory
+      ansible.builtin.file:
+        path: "/backups/postgresql/"
+        state: directory
+        mode: '0770'
+        owner: 'postgres'
+        group: 'root'
+    - name: Create backup of database
+      become: true
+      become_user: postgres
+      community.postgresql.postgresql_db:
+        name: "{{ POSTGRESQL_CKAN_DATABASE }}"
+        state: dump
+        target: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}.sql"
+    - name: Remove all but the latest 100 dumps
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: |
+          find /backups/postgresql/ -type f | sort -r | awk 'NR>100' | xargs --no-run-if-empty rm
   when: db_info.databases is defined and POSTGRESQL_CKAN_DATABASE in db_info.databases
-  ansible.builtin.file:
-    path: "/backups/postgresql/"
-    state: directory
-    mode: '0770'
-    owner: 'postgres'
-    group: 'root'
-- name: Create backup of database
-  when: db_info.databases is defined and POSTGRESQL_CKAN_DATABASE in db_info.databases
-  become: true
-  become_user: postgres
-  community.postgresql.postgresql_db:
-    name: "{{ POSTGRESQL_CKAN_DATABASE }}"
-    state: dump
-    target: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}.sql"
-- name: Remove all but the latest 100 dumps
-  when: db_info.databases is defined and POSTGRESQL_CKAN_DATABASE in db_info.databases
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      find /backups/postgresql/ -type f | sort -r | awk 'NR>100' | xargs --no-run-if-empty rm
