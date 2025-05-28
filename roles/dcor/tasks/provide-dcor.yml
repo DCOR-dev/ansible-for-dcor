@@ -41,7 +41,6 @@
     CKAN_INI: "{{ CKAN_INI }}"
 
 - name: Run dcor develop
-  when: DCOR_DEVELOP | bool == true
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
@@ -49,6 +48,7 @@
       dcor develop --yes
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
+  when: DCOR_DEVELOP | bool
 
 - name: Run dcor inspect
   ansible.builtin.shell:
@@ -60,9 +60,9 @@
     CKAN_INI: "{{ CKAN_INI }}"
 
 - name: Install mailx for automated emails
-  when: EMAIL_SMTP_SERVER != ""
   ansible.builtin.apt:
     name: bsd-mailx
+  when: EMAIL_SMTP_SERVER != ""
 
 - name: Remove default CKAN nginx configuration
   ansible.builtin.file:
