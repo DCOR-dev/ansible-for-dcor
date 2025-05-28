@@ -1,4 +1,5 @@
-CKAN_ENVIRONMENT_ACTIVATE: "/usr/lib/ckan/default/bin/activate"
+CKAN_ENVIRONMENT_DIRECTORY: "/usr/lib/ckan/default"
+CKAN_ENVIRONMENT_ACTIVATE: "{{ CKAN_ENVIRONMENT_DIRECTORY }}/bin/activate"
 CKAN_INI: "/etc/ckan/default/ckan.ini"
 
 CKAN_INI_STORAGE_PATH: "/var/lib/ckan/default"
