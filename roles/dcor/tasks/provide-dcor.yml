@@ -4,7 +4,7 @@
     state: stopped
 
 # setup
-- block
+- block:
     - name: Install Python tools
       ansible.builtin.apt:
         name:
@@ -48,8 +48,6 @@
           pip install --upgrade pip
           pip install --upgrade wheel
           pip install {{ "--upgrade" if DCOR_DEVELOP | bool == false }} dcor_control
-      environment:
-        CKAN_INI: "{{ CKAN_INI }}"
 
     - name: Run dcor develop
       ansible.builtin.shell:
@@ -57,8 +55,6 @@
         cmd: |
           source {{ CKAN_ENVIRONMENT_ACTIVATE }}
           dcor develop --yes
-      environment:
-        CKAN_INI: "{{ CKAN_INI }}"
       when: DCOR_DEVELOP | bool
 
     - name: Run dcor inspect
@@ -67,8 +63,8 @@
         cmd: |
           source {{ CKAN_ENVIRONMENT_ACTIVATE }}
           dcor inspect --assume-yes
-      environment:
-        CKAN_INI: "{{ CKAN_INI }}"
+  environment:
+    CKAN_INI: "{{ CKAN_INI }}"
 
 
 # nginx
@@ -133,6 +129,20 @@
         section: uwsgi
         option: die-on-term
         value: true
+
+    - name: Ensure DCOR workers are defined
+      ansible.builtin.template:
+        src: "etc_supervisor_workers.conf.j2"
+        dest: "/etc/supervisor/conf.d/ckan-worker-dcor-{{ dcor_queue_type }}.conf"
+        owner: root
+        group: root
+        mode: '0644'
+      loop:
+        - "short"
+        - "normal"
+        - "long"
+      loop_control:
+        loop_var: dcor_queue_type
 
     - name: Restart CKAN via supervisor
       community.general.supervisorctl:
