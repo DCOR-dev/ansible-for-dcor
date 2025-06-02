@@ -1,7 +1,4 @@
-192.168.122.143
+localtesting ansible_host=192.168.122.143
 
 [dcorservers]
-192.168.122.143
-
-[localtesting]
-192.168.122.143
+localtesting
