@@ -2,7 +2,7 @@ Secrets in ansible vaults
 =========================
 This directory contains ansible vaults that are not under version control.
 
-To create a vault, first create the "vault/{{ ansible_hostname }}.yml"
+To create a vault, first create the ``vault/{{ ansible_hostname }}.yml``
 file manually and encrypt it with a password::
 
     ansible-vault encrypt vault/ansible_hostname.yml
