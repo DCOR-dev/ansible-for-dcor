@@ -91,3 +91,11 @@
     - name: Tell systemd to reread configs
       ansible.builtin.systemd:
         daemon_reload: true
+
+- name: Setup logrotate for the Supervisor logs
+  ansible.builtin.template:
+    src: etc_logrotate_ckan.j2
+    dest: /etc/logrotate.d/ckan
+    group: root
+    owner: root
+    mode: 0644

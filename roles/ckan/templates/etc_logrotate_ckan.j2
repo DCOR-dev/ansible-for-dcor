@@ -1,0 +1,9 @@
+/var/log/ckan/ckan-*.log {
+  daily
+  rotate 7
+  copytruncate
+  compress
+  missingok
+  notifempty
+  create 0640 www-data adm
+}
