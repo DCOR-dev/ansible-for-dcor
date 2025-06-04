@@ -74,7 +74,7 @@
         proxy_no_cache $ckan_cache_bypass;
         proxy_cache_valid 1d;
         proxy_cache_key $host$scheme$proxy_host$request_uri;
-        proxy_add_header X-DCOR-CACHE-BYPASS "$ckan_cache_bypass";
+        add_header X-DCOR-CACHE-BYPASS "$ckan_cache_bypass";
         #
         # when a client closes the connection then keep the channel to uwsgi open.
         # Otherwise uwsgi throws an IOError and possibly segfaults.
