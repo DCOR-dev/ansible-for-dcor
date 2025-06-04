@@ -13,7 +13,7 @@
         group: root
         mode: '0644'
 
-- name: Setup DCOR background jobs
+- name: Setup DCOR nightly jobs
   ansible.builtin.template:
     src: "etc_cron_dcor_jobs.j2"
     dest: "/etc/cron.d/dcor-{{ ckan_command }}.conf"
@@ -27,3 +27,44 @@
     - "run-jobs-dc-serve"
   loop_control:
     loop_var: ckan_command
+
+- name: Setup automated encrypted database bacḱups
+  block:
+    - name: Install gpg
+      ansible.builtin.apt:
+        name: gpg
+
+    - name: Create keys directory
+      ansible.builtin.file:
+        path: "{{ PGP_KEY_DIR }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0700
+
+    - name: Copy key to host
+      ansible.builtin.copy:
+        src: pgp_*.pub
+        dest: "{{ PGP_KEY_DIR }}"
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Import and trust keys
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: |
+          # import all keys
+          find {{ PGP_KEY_DIR }} -type f | xargs gpg --import
+
+    - name: Create cron job
+      ansible.builtin.template:
+        src: "etc_cron_dcor_backup.j2"
+        dest: "/etc/cron.d/dcor-encrypted-backup-{{ pgp_identifier }}.conf"
+        owner: root
+        group: root
+        mode: '0644'
+      loop: PGP_KEYS_FOR_ENCRYPTED_BACKUPS
+      loop_control:
+        loop_var: pgp_identifier
+  when: PGP_KEYS_FOR_ENCRYPTED_BACKUPS | bool
