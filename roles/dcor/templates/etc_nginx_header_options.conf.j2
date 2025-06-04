@@ -5,8 +5,15 @@ proxy_cache_path /cache/nginx_cache levels=1:2 keys_zone=ANONYM:30m max_size=250
 proxy_cache_path /cache/nginx_cache_static levels=1:2 keys_zone=STATIC:30m max_size=250m;
 proxy_temp_path /cache/nginx_proxy 1 2;
 
-map $upstream_http_cache_control $ckan_cache_bypass {
-    default     1;
-    ~*public    0;
+# We use this variable so we can bypass the cache in the case when the
+# user is logged in. If the user is not logged in, then we would like
+# nginx to cache the response from UWSGI.
+map $http_cookie $ckan_cache_bypass {
+    # Bypass caching by default.
+    default              1;
+    # Bypass caching when the client sends a long "dcor" cookie, which
+    # implies that the user is logged-in (more information in the cookie).
+    "~^dcor=.{280}.*"   1;
+    # Do not bypass caching when the client sends a shorter "dcor" cookie.
+    "~dcor=.*"   0;
 }
-
