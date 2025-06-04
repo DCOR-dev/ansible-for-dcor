@@ -64,7 +64,7 @@
         owner: root
         group: root
         mode: '0644'
-      loop: PGP_KEYS_FOR_ENCRYPTED_BACKUPS
+      loop: "{{ PGP_KEYS_FOR_ENCRYPTED_BACKUPS }}"
       loop_control:
         loop_var: pgp_identifier
   when: PGP_KEYS_FOR_ENCRYPTED_BACKUPS | bool
