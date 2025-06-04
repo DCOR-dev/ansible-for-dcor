@@ -3,6 +3,7 @@
     - name: Install imagemagick
       ansible.builtin.apt:
         name: imagemagick
+        state: latest
 
     - name: Setup cron job for image compression
       ansible.builtin.template:

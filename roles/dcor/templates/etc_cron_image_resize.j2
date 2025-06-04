@@ -1,3 +1,3 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 # At two o'clock, resize all large images to 500x
-0 2 * * * www-data find "{{ CKAN_INI_STORAGE_PATH }}/storage" -type f -size +200k $ -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' $ -exec convert {} -strip -resize 500x {} \;
+0 2 * * * www-data find "{{ CKAN_INI_STORAGE_PATH }}/storage" -type f -size +200k -regex '.*\.\(jpg\|jpeg\|JPG\|JPEG\|png\|PNG\)$' -exec convert {} -strip -resize 512x {} \;
