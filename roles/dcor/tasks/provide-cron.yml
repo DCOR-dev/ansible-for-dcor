@@ -12,3 +12,18 @@
         owner: root
         group: root
         mode: '0644'
+
+- name: Setup DCOR background jobs
+  ansible.builtin.template:
+    src: "etc_cron_dcor_jobs.j2"
+    dest: "/etc/cron.d/dcor-{{ ckan_command }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - "run-jobs-dcor-depot"
+    - "run-jobs-dcor-schemas"
+    - "run-jobs-dc-view"
+    - "run-jobs-dc-serve"
+  loop_control:
+    loop_var: ckan_command
