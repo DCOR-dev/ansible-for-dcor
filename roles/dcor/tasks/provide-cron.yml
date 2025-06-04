@@ -8,7 +8,7 @@
     - name: Setup cron job for image compression
       ansible.builtin.template:
         src: "etc_cron_image_resize.j2"
-        dest: /etc/cron.d/dcor_image_resize
+        dest: /etc/cron.d/dcor-image-resize
         owner: root
         group: root
         mode: '0644'
