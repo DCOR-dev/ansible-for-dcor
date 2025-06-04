@@ -38,6 +38,10 @@ ckan.auth.reveal_private_datasets: false
 ckan.upload.user.types: image
 ckan.upload.group.types: image
 
+# Add cache control headers, so nginx can cache public information
+ckan.cache_enabled: true
+ckan.cache_expires: 86400
+
 # DCOR object storage via S3
 dcor_object_store.access_key_id: {{ DCOR_S3_ACCESS_KEY_ID }}
 dcor_object_store.secret_access_key: {{ DCOR_S3_SECRET_ACCESS_KEY }}
