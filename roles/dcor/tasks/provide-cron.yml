@@ -1,0 +1,13 @@
+- name: Setup automated image compression
+  block:
+    - name: Install imagemagick
+      ansible.builtin.apt:
+        name: imagemagick
+
+    - name: Setup cron job for image compression
+      ansible.builtin.template:
+        src: "etc_cron_image_resize.j2"
+        dest: /etc/cron.d/dcor_image_resize
+        owner: root
+        group: root
+        mode: '0644'

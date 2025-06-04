@@ -4,6 +4,7 @@ CKAN_ENVIRONMENT_ACTIVATE: "{{ CKAN_ENVIRONMENT_DIRECTORY }}/bin/activate"
 FULLY_QUALIFIED_DOMAIN_NAME: "{{ inventory_hostname }}"
 
 CKAN_INI: "/etc/ckan/default/ckan.ini"
+CKAN_INI_STORAGE_PATH: "/data"
 CKAN_INI_SITE_TITLE: "DCOR Base"
 CKAN_INI_SOLR_URL: "http://localhost:8983/solr/ckan"
 CKAN_INI_AUTH_CREATE_USER_VIA_API: false
