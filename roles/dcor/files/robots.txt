@@ -1,0 +1,12 @@
+User-agent: *
+# General things that robots are not interested in
+Disallow: /user
+Disallow: /fonts
+Disallow: /webassets
+# Individual resource data is not interesting for bots. Not sure whether
+# this helps though, because not all bots implement glob pattern expansion.
+Disallow: /dataset/*/resource
+Disallow: /*preview.png$
+Disallow: /*.rtdc$
+# Search
+Disallow: /dataset/?q=

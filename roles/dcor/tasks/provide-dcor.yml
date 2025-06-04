@@ -3,8 +3,8 @@
     name: nginx
     state: stopped
 
-# setup
-- block:
+- name: Install libraries and setup directories
+  block:
     - name: Install Python tools
       ansible.builtin.apt:
         name:
@@ -23,8 +23,8 @@
         path: "{{ DCOR_SCRATCH_DIRECTORY }}"
         state: directory
 
-# ckan.ini
-- block:
+- name: Setup ckan.ini
+  block:
     - name: Fetch CKAN_INI configuration from template
       set_fact:
         ckan_ini_data: "{{ lookup('template', 'ckan_ini.yml.j2') }}"
@@ -38,8 +38,8 @@
       with_items:
         - "{{ ckan_ini_data | from_yaml | dict2items }}"
 
-# DCOR install
-- block:
+- name: Install DCOR
+  block:
     - name: Install DCOR
       ansible.builtin.shell:
         executable: /bin/bash
@@ -67,12 +67,21 @@
     CKAN_INI: "{{ CKAN_INI }}"
 
 
-# nginx
-- block:
+- name: Setup nginx
+  block:
     - name: Remove default CKAN nginx configuration
       ansible.builtin.file:
         path: /etc/nginx/sites-enabled/ckan
         state: absent
+
+    - name: Copy production robots.txt (only for non-development setups)
+      ansible.builtin.copy:
+        src: robots.txt
+        dest: /var/www/robots.txt
+        owner: root
+        group: root
+        mode: '0644'
+      when: DCOR_DEVELOP | bool == false
 
     - name: Add DCOR nginx configuration
       ansible.builtin.template:
@@ -89,8 +98,8 @@
         dest: /etc/nginx/sites-enabled/dcor
         state: link
 
-# supervisor + uwsgi
-- block:
+- name: Setup supervisor + uwsgi
+  block:
     - name: Stop CKAN via supervisor
       community.general.supervisorctl:
         name: all
