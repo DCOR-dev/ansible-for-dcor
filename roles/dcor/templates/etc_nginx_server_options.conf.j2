@@ -21,9 +21,16 @@
     }
 
     # Avoid spamming the logs by these frequent invalid requests
-    location ~ ^(/user/reset|/userportal|/user\.action) {
+    location ~ ^(/userportal|/user\.action) {
         deny all;
     }
+
+    {% if CKAN_INI_AUTH_CREATE_USER_VIA_WEB | bool == false %}
+    # User registration is disabled for this instance
+    location ~ ^/user/register {
+        deny all;
+    }
+    {% endif %}
 
     # file extensions that should not be used on a CKAN instance
     location ~* \.(aspx|gif|html?|php\d?|pl|rar|sql|tar|tar.gz|zip)$ {
