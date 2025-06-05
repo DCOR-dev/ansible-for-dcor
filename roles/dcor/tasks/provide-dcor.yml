@@ -63,6 +63,14 @@
         cmd: |
           source {{ CKAN_ENVIRONMENT_ACTIVATE }}
           dcor inspect --assume-yes
+
+    - name: Install dcor binary
+      ansible.builtin.template:
+        src: "bin_dcor"
+        dest: /usr/bin/dcor
+        owner: root
+        group: root
+        mode: '0700'
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
 
