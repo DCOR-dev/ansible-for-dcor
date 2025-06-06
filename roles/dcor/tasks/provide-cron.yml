@@ -28,6 +28,15 @@
   loop_control:
     loop_var: ckan_command
 
+- name: Weekly purge all datasets for development instances
+  ansible.builtin.template:
+    src: "etc_cron_dcor_reset.j2"
+    dest: "/etc/cron.d/dcor-reset.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  when: DCOR_DEVELOP | bool
+
 - name: Setup automated encrypted database bacḱups
   block:
     - name: Install gpg

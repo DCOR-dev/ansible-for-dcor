@@ -71,6 +71,15 @@
         owner: root
         group: root
         mode: '0700'
+
+    - name: Populate figshare data
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: |
+          source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+          ckan dcor-import-figshare
+      when: DCOR_FIGSHARE_IMPORT | bool
+
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
 

@@ -32,6 +32,9 @@ DCOR_SCHEMAS_PATH_DEFAULT: "{{ CKAN_ENVIRONMENT_DIRECTORY }}/lib/python3.10/site
 # Path to ckanext.dcor_schemas installation when DCOR_DEVELOP == true
 DCOR_SCHEMAS_PATH_DEVELOP: "/dcor-repos/ckanext-dcor_schemas/ckanext/dcor_schemas"
 
+# Whether to import figshare data
+DCOR_FIGSHARE_IMPORT: false
+
 # Object storage access
 DCOR_S3_ENDPOINT_URL: "http://localhost:9000"
 DCOR_S3_ACCESS_KEY_ID: "dcor-access"
