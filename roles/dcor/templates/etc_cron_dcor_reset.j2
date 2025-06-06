@@ -1,0 +1,7 @@
+PATH={{ CKAN_ENVIRONMENT_DIRECTORY }}/bin
+# Reset the CKAN instance every Sunday for development instances.
+# The user `dcoraid` is protected from purging.
+# The `dcor inspect` call at the end makes sure all resources on S3 are also deleted.
+{% if DCOR_DEVELOP | bool %}
+5 0 * * 7 root (dcor reset --datasets --zombie-users --keep-user dcoraid --yes && {% if DCOR_FIGSHARE_IMPORT | bool %} ckan dcor-import-figshare && {% endif %} dcor inspect --assume-yes) >> /var/log/ckan/ckan-cron-reset.log 2>&1
+{% endif %}
