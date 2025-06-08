@@ -32,7 +32,8 @@
       update-rc.d -f solr remove
   when: solr_vd.rc == 0 and SOLR_VERSION not in solr_vd.stdout
 
-- block:
+- name: Ensure currect Solr version is installed
+  block:
     - name: Create install directory
       ansible.builtin.file:
         path: "{{ ANSIBLE_DOWNLOAD_DIR }}"
@@ -40,7 +41,7 @@
 
     - name: Download Solr
       ansible.builtin.get_url:
-        url: "https://www.apache.org/dyn/closer.lua/solr/solr/{{ SOLR_VERSION }}/solr-{{ SOLR_VERSION }}.tgz?action=download"
+        url: "https://dlcdn.apache.org/solr/solr/{{ SOLR_VERSION }}/solr-{{ SOLR_VERSION }}.tgz"
         dest: "{{ ANSIBLE_DOWNLOAD_DIR }}solr-{{ SOLR_VERSION }}.tgz"
         checksum: sha512:{{ SOLR_INSTALLER_SHA512 }}
         mode: '0400'
