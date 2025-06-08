@@ -14,8 +14,12 @@
     }
     {% endif %}
 
+    # Favicon and bookmark images
     location = /favicon.ico {
         alias /var/www/dcor-favicon.ico;
+    }
+    location ~ ^/images/(dcor\-[0-9]*\.png)$ {
+        alias /var/www/$1;
     }
 
     # Block outdated versions of DCOR-Aid.

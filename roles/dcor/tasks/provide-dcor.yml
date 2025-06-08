@@ -140,8 +140,14 @@
       ansible.builtin.shell:
         executable: /bin/bash
         cmd: |
-          inkscape -z -o /var/www/dcor-favicon.png -w 32 -h 32 /var/www/dcor-favicon.svg
-          icotool -c -o /var/www/dcor-favicon.ico /var/www/dcor-favicon.png
+          # favicon
+          inkscape /var/www/dcor-favicon.svg -o /var/www/dcor-favicon.png -w 32 -h 32
+          icotool /var/www/dcor-favicon.png -c -o /var/www/dcor-favicon.ico
+          # additional image files for bookmarks
+          inkscape /var/www/dcor-favicon.svg -o /var/www/dcor-076.png -w 76
+          inkscape /var/www/dcor-favicon.svg -o /var/www/dcor-096.png -w 96
+          inkscape /var/www/dcor-favicon.svg -o /var/www/dcor-152.png -w 152
+          inkscape /var/www/dcor-favicon.svg -o /var/www/dcor-180.png -w 152
 
     - name: Uninstall inkscape and icotools
       ansible.builtin.apt:
