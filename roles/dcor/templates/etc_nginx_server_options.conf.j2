@@ -14,6 +14,10 @@
     }
     {% endif %}
 
+    location = /favicon.ico {
+        alias /var/www/dcor-favicon.ico;
+    }
+
     # Block outdated versions of DCOR-Aid.
     # This is a regexp matching unsupported DCOR-Aid versions.
     if ($http_user_agent ~* "^DCOR-Aid/(0\.[0-9]\.|0\.1[0-5]\.|0\.16\.[0-9]\.|0\.16\.10\.)") {

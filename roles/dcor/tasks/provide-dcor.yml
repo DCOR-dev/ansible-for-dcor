@@ -115,6 +115,43 @@
         dest: /etc/nginx/sites-enabled/dcor
         state: link
 
+- name: Check if favicon exists
+  stat:
+    path: "/var/www/favicon.ico"
+  register: favicon_result
+
+- name: Setup favicon
+  block:
+    - name: Install inkscape and icotools
+      ansible.builtin.apt:
+        name:
+        - icoutils
+        - inkscape
+
+    - name: Create favicon
+      ansible.builtin.template:
+        src: "favicon.svg.j2"
+        dest: /var/www/dcor-favicon.svg
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Create favicon
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: |
+          inkscape -z -o /var/www/dcor-favicon.png -w 32 -h 32 /var/www/dcor-favicon.svg
+          icotool -c -o /var/www/dcor-favicon.ico /var/www/dcor-favicon.png
+
+    - name: Uninstall inkscape and icotools
+      ansible.builtin.apt:
+        name:
+        - icoutils
+        - inkscape
+        state: absent
+
+  when: not favicon_result.stat.exists
+
 - name: Setup supervisor + uwsgi
   block:
     - name: Stop CKAN via supervisor
