@@ -39,7 +39,7 @@ DCOR_FAVICON_COLOR: "#a47f45"
 DCOR_FIGSHARE_IMPORT: false
 
 # Object storage access
-DCOR_S3_ENDPOINT_URL: "http://localhost:9000"
+DCOR_S3_ENDPOINT_URL: "http://{{ FULLY_QUALIFIED_DOMAIN_NAME }}:9000"
 DCOR_S3_ACCESS_KEY_ID: "dcor-access"
 # The S3 bucket name stub is a unique prefix to the buckets created by DCOR.
 # There might be multiple DCOR instances on one S3 instance, so it should be
