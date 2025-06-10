@@ -20,7 +20,7 @@
 
     - name: Create scratch directory
       ansible.builtin.file:
-        path: "{{ DCOR_SCRATCH_DIRECTORY }}"
+        path: "{{ CACHE_DIR }}"
         state: directory
 
 - name: Setup ckan.ini

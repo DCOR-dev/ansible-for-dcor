@@ -7,3 +7,7 @@ EMAIL_SMTP_STARTTLS: true
 EMAIL_SMTP_TLS: true
 EMAIL_SMTP_USER: ""
 EMAIL_SMTP_PASSWORD: ""
+
+# Cache partition name
+CACHE_DISK: "/dev/vdb"
+CACHE_DIR: "/cache"

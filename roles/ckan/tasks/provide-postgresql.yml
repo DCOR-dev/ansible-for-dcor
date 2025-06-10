@@ -12,8 +12,8 @@
     # remove the old server and client packages
     #     apt purge postgresql-14 and postgresql-client-14
     # For now, we pin the version of postgresql.
-    - postgresql-14
-    - postgresql-client-14
+    - postgresql-16
+    - postgresql-client-16
     - python3-psycopg2
     - libpq5
     state: latest

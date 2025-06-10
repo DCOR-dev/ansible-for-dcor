@@ -21,7 +21,7 @@ EMAIL_SMTP_REPLY_TO: ""
 CKAN_INI_EMAIL_TO: "{{ MAINTAINER_EMAIL }}"
 CKAN_INI_ERROR_EMAIL_FROM: "error-dcor@{{ FULLY_QUALIFIED_DOMAIN_NAME }}"
 
-DCOR_SCRATCH_DIRECTORY: "/cache"
+CACHE_DIR: "/cache"
 DCOR_DEVELOP: false
 DCOR_USE_LOCAL_MINIO: false
 # We set SSL verification to True, even though this won't work with MinIO,

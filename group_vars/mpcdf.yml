@@ -10,3 +10,6 @@ CKAN_INI_EMAIL_TO: "{{ MAINTAINER_EMAIL }}"
 CKAN_INI_ERROR_EMAIL_FROM: "error-dcor-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@mpcdf.mpg.de"
 DCOR_S3_ENDPOINT_URL: "https://objectstore.hpccloud.mpcdf.mpg.de"
 PGP_KEYS_FOR_ENCRYPTED_BACKUPS: ["2B4B066FFE3D288E"]
+
+SSL_CERTIFICATE_PUBLIC: "/etc/letsencrypt/live/DVcert/fullchain.pem"
+SSL_CERTIFICATE_PRIVATE: "/etc/letsencrypt/live/DVcert/privkey.pem"

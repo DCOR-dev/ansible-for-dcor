@@ -12,6 +12,8 @@ To get started on your control node, install ansible::
     ansible-galaxy collection install community.general
     # https://docs.ansible.com/ansible/latest/collections/community/postgresql/index.html
     ansible-galaxy collection install community.postgresql
+    # mounting cache partition automatically
+    ansible-galaxy collection install ansible.posix
 
 The following roles are available:
 

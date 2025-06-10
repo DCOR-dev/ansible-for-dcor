@@ -77,11 +77,11 @@ solr_url: {{ CKAN_INI_SOLR_URL }}
 
 
 # ckanex-dcor_depot (used for caching e.g. figshare data)
-ckanext.dcor_depot.tmp_dir: /cache/ckanext-dcor_depot
+ckanext.dcor_depot.tmp_dir: {{ CACHE_DIR }}/ckanext-dcor_depot
 
 # ckanext-dc_serve
 ckanext.dc_serve.create_condensed_datasets: true
-ckanext.dc_serve.tmp_dir: "{{ DCOR_SCRATCH_DIRECTORY }}/ckanext-dc_serve"
+ckanext.dc_serve.tmp_dir: {{ CACHE_DIR }}/ckanext-dc_serve
 
 # ckanext-dcor_schemas
 ckan.extra_resource_fields: etag sha256

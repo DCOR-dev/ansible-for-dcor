@@ -1,0 +1,21 @@
+- name: Check whether cache device exists
+  ansible.builtin.stat:
+    path: "{{ CACHE_DISK }}"
+  register: stdev
+
+- name: Setup cache disk
+  block:
+    - name: Format disk
+      community.general.filesystem:
+        fstype: xfs
+        device: "{{ CACHE_DISK }}"
+
+    - name: Setup cache partition
+      ansible.posix.mount:
+        path: "{{ CACHE_DIR }}"
+        src: "{{ CACHE_DISK }}"
+        fstype: xfs
+        opts: noatime
+        state: mounted
+
+  when: stdev.stat.exists

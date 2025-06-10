@@ -1,2 +1,3 @@
+- include_tasks: setup-cache-disk.yml
 - include_tasks: set-apt-unattended-upgrades.yml
 - include_tasks: set-systemd-journald.yml
