@@ -80,6 +80,13 @@
           ckan dcor-import-figshare
       when: DCOR_FIGSHARE_IMPORT | bool
 
+    - name: Make sure storage directory is owned by www-data
+      ansible.builtin.file:
+        dest: "{{ CKAN_INI_STORAGE_PATH }}"
+        owner: www-data
+        group: www-data
+        recurse: true
+
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
 
