@@ -3,11 +3,6 @@
     name: nginx
     state: latest
 
-- name: Make sure nginx is not running
-  systemd:
-    name: nginx
-    state: stopped
-
 - name: Only keep nginx logs for seven days
   block:
     - name: Install logrotate

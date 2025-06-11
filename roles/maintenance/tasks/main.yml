@@ -1,0 +1,49 @@
+- name: Add maintenance nginx configuration
+  ansible.builtin.template:
+    # Depending on whether HTTPS is enabled or not, a different config is used.
+    src: "etc_nginx_{{ 'https' if DCOR_HTTPS_ENABLED else 'http_only' }}.conf.j2"
+    dest: /etc/nginx/sites-available/00_maintenance
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add maintenance html message
+  ansible.builtin.template:
+    # Depending on whether HTTPS is enabled or not, a different config is used.
+    src: "maintenance.html.j2"
+    dest: /var/www/maintenance.html
+    owner: root
+    group: www-data
+    mode: '0644'
+
+- name: Enable maintenance mode
+  block:
+    - name: Enable maintenance page
+      file:
+        src: /etc/nginx/sites-available/00_maintenance
+        dest: /etc/nginx/sites-enabled/00_maintenance
+        state: link
+    - name: Disable DCOR page
+      file:
+        path: /etc/nginx/sites-enabled/dcor
+        state: absent
+  when: maintenance_mode | bool == true
+
+- name: Disable maintenance mode
+  block:
+    - name: Enable DCOR page
+      file:
+        src: /etc/nginx/sites-available/dcor
+        dest: /etc/nginx/sites-enabled/dcor
+        state: link
+    - name: Disable maintenance page
+      file:
+        path: /etc/nginx/sites-enabled/00_maintenance
+        state: absent
+  when: maintenance_mode | bool == false
+
+- name: Reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+    enabled: yes

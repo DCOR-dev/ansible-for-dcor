@@ -26,10 +26,6 @@
   ansible.builtin.apt:
     deb: "{{ ANSIBLE_DOWNLOAD_DIR }}{{ CKAN_DEB_NAME }}"
 
-- name: Make sure nginx is not running
-  systemd:
-    name: nginx
-    state: stopped
 
 - name: Create CKAN_INI_STORAGE_PATH directory
   ansible.builtin.file:
@@ -61,12 +57,6 @@
       ckan db init
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
-
-- name: Reload nginx
-  ansible.builtin.service:
-    name: nginx
-    state: reloaded
-    enabled: true
 
 - name: Restart CKAN via supervisor
   community.general.supervisorctl:

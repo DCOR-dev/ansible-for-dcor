@@ -1,0 +1,15 @@
+
+    # Favicon and bookmark images
+    location = /favicon.ico {
+        alias /var/www/dcor-favicon.ico;
+    }
+
+    location / {
+         return 503;
+    }
+
+    # Return maintenance page
+    error_page 503 /maintenance.html;
+    location = /maintenance.html {
+        root /var/www/;
+    }

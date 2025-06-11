@@ -1,6 +1,12 @@
 - hosts: dcorservers
   roles:
+    - role: maintenance
+      vars:
+        maintenance_mode: true
     - common
     - secrets
     - ckan
     - dcor
+    - role: maintenance
+      vars:
+        maintenance_mode: false
