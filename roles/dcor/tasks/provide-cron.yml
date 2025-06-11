@@ -58,6 +58,7 @@
         owner: root
         group: root
         mode: '0600'
+        remote_src: no
 
     - name: Import and trust keys
       ansible.builtin.shell:

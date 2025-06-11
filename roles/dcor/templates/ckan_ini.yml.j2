@@ -75,6 +75,8 @@ ckan.webassets.path: /var/lib/ckan/webassets
 # Default for local installation is http://localhost:8983/solr/ckan
 solr_url: {{ CKAN_INI_SOLR_URL }}
 
+# Custom template paths that ansible populates
+extra_template_paths: /var/www/ckan_templates
 
 # ckanex-dcor_depot (used for caching e.g. figshare data)
 ckanext.dcor_depot.tmp_dir: {{ CACHE_DIR }}/ckanext-dcor_depot

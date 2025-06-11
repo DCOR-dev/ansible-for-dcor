@@ -33,6 +33,25 @@
       with_items:
         - "{{ ckan_ini_data | from_yaml | dict2items }}"
 
+- name: Apply custom branding
+  block:
+    - name: Apply MPCDF branding
+      ansible.builtin.copy:
+        src: ckan_templates_mpcdf/
+        dest: /var/www/ckan_templates/
+        owner: root
+        group: www-data
+        remote_src: no
+      when: "'mpcdf' in group_names"
+    - name: Apply MEDICAL branding
+      ansible.builtin.copy:
+        src: ckan_templates_medical/
+        dest: /var/www/ckan_templates/
+        owner: root
+        group: www-data
+        remote_src: no
+      when: "'medical' in group_names"
+
 - name: Install DCOR
   block:
     - name: Install DCOR
@@ -100,6 +119,7 @@
         owner: root
         group: root
         mode: '0644'
+        remote_src: no
       when: DCOR_DEVELOP | bool == false
 
     - name: Add DCOR nginx configuration
