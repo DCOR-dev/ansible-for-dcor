@@ -2,3 +2,4 @@
   when: DCOR_USE_LOCAL_MINIO | bool
 - include_tasks: provide-dcor.yml
 - include_tasks: provide-cron.yml
+- include_tasks: send-summary-email.yml
