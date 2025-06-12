@@ -1,4 +1,4 @@
-EMAIL_SMTP_SERVER: post.mpcdf.mpg.de
+EMAIL_SMTP_SERVER: mailrelay.hpccloud.mpcdf.mpg.de
 EMAIL_SMTP_STARTTLS: false
 EMAIL_SMTP_TLS: false
 EMAIL_SMTP_USER: ""
