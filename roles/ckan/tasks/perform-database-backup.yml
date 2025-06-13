@@ -25,7 +25,7 @@
       community.postgresql.postgresql_db:
         name: "{{ POSTGRESQL_CKAN_DATABASE }}"
         state: dump
-        target: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}.sql"
+        target: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}.pgc"
     - name: Remove all but the latest 100 dumps
       ansible.builtin.shell:
         executable: /bin/bash
