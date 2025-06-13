@@ -1,0 +1,11 @@
+- hosts: dcorservers
+  roles:
+    - role: maintenance
+      vars:
+        maintenance_mode: true
+    - role: backup
+      vars:
+        backup_mode: "create"
+    - role: maintenance
+      vars:
+        maintenance_mode: false

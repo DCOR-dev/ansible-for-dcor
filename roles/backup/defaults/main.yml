@@ -1,0 +1,10 @@
+backup_mode: "undefined"
+
+POSTGRESQL_CKAN_HOST: "localhost"
+POSTGRESQL_CKAN_USER: "ckan_default"
+POSTGRESQL_CKAN_DATABASE: "ckan_default"
+
+CKAN_ENVIRONMENT_DIRECTORY: "/usr/lib/ckan/default"
+CKAN_ENVIRONMENT_ACTIVATE: "{{ CKAN_ENVIRONMENT_DIRECTORY }}/bin/activate"
+CKAN_INI_STORAGE_PATH: "/data"
+CKAN_INI: "/etc/ckan/default/ckan.ini"
