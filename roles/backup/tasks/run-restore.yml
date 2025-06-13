@@ -1,0 +1,96 @@
+- name: Hard-coded dirs
+  set_fact:
+    restore_unarchive: "/tmp/restore"
+
+- name: Check whether we have a restore file
+  local_action: stat path={{ restore_path_local }}
+  register: restore_file_stat
+
+- name: Restore backup from playbook_dir/backups/ansible_host/backup_full.tar.bz2
+  block:
+    - name: Install Dependencies
+      ansible.builtin.apt:
+        name: unzip
+        state: latest
+
+    - name: Ensure existing restores are removed
+      ansible.builtin.file:
+        path: "{{ restore_unarchive }}"
+        state: absent
+
+    - name: Recreate new restore directory
+      ansible.builtin.file:
+        path: "{{ restore_unarchive }}"
+        state: directory
+        mode: '0770'
+        owner: 'postgres'
+        group: 'root'
+
+    - name: Extract postgresql from archive
+      ansible.builtin.unarchive:
+        src: "{{ restore_path_local }}"
+        dest: "{{ restore_unarchive }}"
+        include: ["backups"]
+
+    - name: Clean current database
+      ansible.builtin.shell:
+        executable: bash
+        cmd: |
+          source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+          ckan db clean --yes
+
+    - name: find database file
+      ansible.builtin.find:
+        paths: "{{ restore_unarchive }}/backups/postgresql"
+        patterns: '*.pgc'
+      # there should only be one database file
+      register: dbfiles
+
+    - name: Restore database
+      become: true
+      become_user: postgres
+      community.postgresql.postgresql_db:
+        name: "{{ POSTGRESQL_CKAN_DATABASE}}"
+        state: restore
+        target: "{{ dbfiles.files[0].path }}"
+
+    - name: Cleanup restore path
+      ansible.builtin.file:
+        path: "{{ restore_unarchive }}"
+        state: absent
+
+    - name: Remove CKAN_INI_STORAGE_PATH
+      ansible.builtin.file:
+        path: "{{ CKAN_INI_STORAGE_PATH }}"
+        state: absent
+
+    - name: Restore CKAN_INI_STORAGE_PATH from backup
+      ansible.builtin.unarchive:
+        src: "{{ restore_path_local }}"
+        dest: "/"
+        # the [1:] removes the leading slash which is not in the archive
+        include: ["{{ CKAN_INI_STORAGE_PATH[1:] }}"]
+
+    - name: Upgrade database (in case backup from older CKAN version)
+      ansible.builtin.shell:
+        executable: bash
+        cmd: |
+          source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+          ckan db upgrade
+
+    - name: Rebuild search index
+      ansible.builtin.shell:
+        executable: bash
+        cmd: |
+          source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+          ckan search-index rebuild --clear
+
+    - name: Rename the restore file, so that it is not used again
+      local_action: command mv '{{ restore_path_local }}' '{{ restore_path_local }}.restored-{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}'
+
+  environment:
+    CKAN_INI: "{{ CKAN_INI }}"
+
+  when:
+    - backup_mode == "restore"
+    - restore_file_stat.stat.exists

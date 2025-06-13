@@ -1,0 +1,51 @@
+- name: Create backup and copy to controller into playbook_dir/backups
+  block:
+    - name: Advertise backup time
+      set_fact:
+        backup_time: "{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}"
+
+    - name: Define backup names
+      set_fact:
+        # database
+        backup_path_db: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ backup_time }}.pgc"
+        # storage (images of users and circles)
+        backup_path: "/backups/full/backup_full_{{ backup_time }}.tar.bz2"
+
+    - name: Ensure DB backup directory exist
+      ansible.builtin.file:
+        path: "/backups/postgresql"
+        state: directory
+        mode: '0770'
+        owner: 'postgres'
+        group: 'root'
+
+    - name: Ensure full backup directory exist
+      ansible.builtin.file:
+        path: "/backups/full"
+        state: directory
+        mode: '0700'
+        owner: 'root'
+        group: 'root'
+
+    - name: Backup database
+      become: true
+      become_user: postgres
+      community.postgresql.postgresql_db:
+        name: "{{ POSTGRESQL_CKAN_DATABASE}}"
+        state: dump
+        target: "{{ backup_path_db }}"
+
+    - name: Backup storage
+      community.general.archive:
+        path:
+          - "{{ CKAN_INI_STORAGE_PATH }}"
+          - "{{ backup_path_db }}"
+        dest: "{{ backup_path }}"
+        format: bz2
+
+    - name: Specifying a path directly
+      ansible.builtin.fetch:
+        src: "{{ backup_path }}"
+        dest: "{{ playbook_dir }}/backups/host-{{ inventory_hostname }}/"
+        flat: yes
+  when: backup_mode == "create"

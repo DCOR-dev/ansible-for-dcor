@@ -17,12 +17,31 @@ To get started on your control node, install ansible::
 
 The following roles are available:
 
-- secrets: Set up internal secrets for DCOR
-- common: General administrative tasks like unattended-upgrades
+- backup: Create and restore backups (see below)
 - ckan: Install CKAN with all its dependencies (including postgresql and Solr)
+- common: General administrative tasks like unattended-upgrades
 - dcor: Install DCOR on top of an existing CKAN installation
+- maintenance: put a DCOR instance into maintenance mode
+- secrets: Set up internal secrets for DCOR
 
 Notes:
 
-- The playbooks do not touch the redis or postgresql databases. Only access
-  credentials are modified.
+- The `site.yml` playbook does touch the redis or postgresql databases.
+  Only access credentials are modified.
+
+
+Backups
+-------
+The `backup-create.yml` and `backup-restore.yml` playbooks can be used to
+create unencrypted backups of the CKAN database and the CKAN storage directory
+(containing custom uploads such as user and organization images).
+
+To create a backup, run::
+
+    ansible-playbook -i staging backup-create.yml
+
+This will create a compressed backup in the corresponding `backups/host-*` directory.
+For restoring a backup, you have to rename it to `restore_full.tar.bz2` in the
+corresponding host-specific directory. Note that if the `CKAN_INI_STORAGE_PATH`
+variable is different on the restore host, you will have to either manually
+move the files after restoring or modify the backup file in-place.
