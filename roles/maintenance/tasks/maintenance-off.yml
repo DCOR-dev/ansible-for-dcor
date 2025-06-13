@@ -1,0 +1,17 @@
+- name: Disable maintenance mode
+  block:
+    - name: Ensure supervisor is running
+      community.general.supervisorctl:
+        name: all
+        state: started
+    - name: Enable DCOR page
+      file:
+        src: /etc/nginx/sites-available/dcor
+        dest: /etc/nginx/sites-enabled/dcor
+        state: link
+      when: "'dcorlegacy' not in group_names"
+    - name: Disable maintenance page
+      file:
+        path: /etc/nginx/sites-enabled/00_maintenance
+        state: absent
+  when: maintenance_mode | bool == false
