@@ -26,7 +26,7 @@ The following roles are available:
 
 Notes:
 
-- The `site.yml` playbook does touch the redis or postgresql databases.
+- The `site.yml` playbook does not touch the redis or postgresql databases.
   Only access credentials are modified.
 
 
