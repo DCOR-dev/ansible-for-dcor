@@ -31,6 +31,7 @@
       file:
         path: /etc/nginx/sites-enabled/dcor
         state: absent
+      when: "'dcorlegacy' not in group_names"
   when: maintenance_mode | bool == true
 
 - name: Disable maintenance mode
@@ -44,6 +45,7 @@
         src: /etc/nginx/sites-available/dcor
         dest: /etc/nginx/sites-enabled/dcor
         state: link
+      when: "'dcorlegacy' not in group_names"
     - name: Disable maintenance page
       file:
         path: /etc/nginx/sites-enabled/00_maintenance

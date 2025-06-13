@@ -1,2 +1,7 @@
 maintenance_mode: true
+
+CKAN_INI_SITE_TITLE: DCOR
 DCOR_HTTPS_ENABLED: true
+
+SSL_CERTIFICATE_PUBLIC: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+SSL_CERTIFICATE_PRIVATE: "/etc/ssl/private/ssl-cert-snakeoil.key"

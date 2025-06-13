@@ -68,3 +68,6 @@ PGP_KEY_DIR: "/root/pgp_keys"
 PGP_KEYS_FOR_ENCRYPTED_BACKUPS: []
 
 UWSGI_NUM_WORKERS: 4
+
+SSL_CERTIFICATE_PUBLIC: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+SSL_CERTIFICATE_PRIVATE: "/etc/ssl/private/ssl-cert-snakeoil.key"
