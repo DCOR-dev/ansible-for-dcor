@@ -23,6 +23,10 @@
         src: /etc/nginx/sites-available/00_maintenance
         dest: /etc/nginx/sites-enabled/00_maintenance
         state: link
+    - name: Stop supervisor (make sure all transactions are completed)
+      community.general.supervisorctl:
+        name: all
+        state: stopped
     - name: Disable DCOR page
       file:
         path: /etc/nginx/sites-enabled/dcor
@@ -31,6 +35,10 @@
 
 - name: Disable maintenance mode
   block:
+    - name: Ensure supervisor is running
+      community.general.supervisorctl:
+        name: all
+        state: started
     - name: Enable DCOR page
       file:
         src: /etc/nginx/sites-available/dcor
