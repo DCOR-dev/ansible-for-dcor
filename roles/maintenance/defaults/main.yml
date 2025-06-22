@@ -3,5 +3,8 @@ maintenance_mode: true
 CKAN_INI_SITE_TITLE: DCOR
 DCOR_HTTPS_ENABLED: true
 
-SSL_CERTIFICATE_PUBLIC: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
-SSL_CERTIFICATE_PRIVATE: "/etc/ssl/private/ssl-cert-snakeoil.key"
+SSL_CERTIFICATE_PUBLIC_FALLBACK: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+SSL_CERTIFICATE_PRIVATE_FALLBACK: "/etc/ssl/private/ssl-cert-snakeoil.key"
+
+SSL_CERTIFICATE_PUBLIC: "{{ SSL_CERTIFICATE_PUBLIC_FALLBACK }}"
+SSL_CERTIFICATE_PRIVATE: "{{ SSL_CERTIFICATE_PRIVATE_FALLBACK }}"

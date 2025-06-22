@@ -1,3 +1,14 @@
+- name: Check whether we already have SSL set-up properly
+  ansible.builtin.stat:
+    path: "{{ SSL_CERTIFICATE_PRIVATE }}"
+  register: private_cert
+
+- name: Override SSL certificates with fallback
+  set_fact:
+    SSL_CERTIFICATE_PRIVATE: "{{ SSL_CERTIFICATE_PRIVATE_FALLBACK }}"
+    SSL_CERTIFICATE_PUBLIC: "{{ SSL_CERTIFICATE_PUBLIC_FALLBACK }}"
+  when: not private_cert.stat.exists
+
 - name: Add maintenance nginx configuration
   ansible.builtin.template:
     # Depending on whether HTTPS is enabled or not, a different config is used.
@@ -18,6 +29,12 @@
 
 - name: Enable maintenance mode
   block:
+    - name: Stop service cron on debian, if running
+      # Stopping cron is important, in case we are doing database updates
+      # and a background job is set to remove unused S3 artifacts.
+      ansible.builtin.systemd_service:
+        name: cron
+        state: stopped
     - name: Enable maintenance page
       file:
         src: /etc/nginx/sites-available/00_maintenance

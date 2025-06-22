@@ -14,4 +14,8 @@
       file:
         path: /etc/nginx/sites-enabled/00_maintenance
         state: absent
+    - name: Start service cron on debian
+      ansible.builtin.systemd_service:
+        name: cron
+        state: started
   when: maintenance_mode | bool == false
