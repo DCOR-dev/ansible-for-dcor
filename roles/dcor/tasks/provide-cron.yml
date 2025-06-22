@@ -16,7 +16,7 @@
 - name: Setup DCOR nightly jobs
   ansible.builtin.template:
     src: "etc_cron_dcor_jobs.j2"
-    dest: "/etc/cron.d/dcor-{{ ckan_command }}.conf"
+    dest: "/etc/cron.d/dcor-{{ ckan_command }}"
     owner: root
     group: root
     mode: '0644'
@@ -28,10 +28,25 @@
   loop_control:
     loop_var: ckan_command
 
+- name: Setup DCOR nightly cleanup/pruning
+  ansible.builtin.template:
+    src: "etc_cron_dcor_prune.j2"
+    dest: "/etc/cron.d/dcor-{{ ckan_command }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - "dcor-prune-stale-multipart-uploads"
+    # The following is too dangerous and should only be done manually
+    # when the maintainer knows that the database is intact!
+    # - "dcor-prune-orphaned-s3-artifacts"
+  loop_control:
+    loop_var: ckan_command
+
 - name: Weekly purge all datasets for development instances
   ansible.builtin.template:
     src: "etc_cron_dcor_reset.j2"
-    dest: "/etc/cron.d/dcor-reset.conf"
+    dest: "/etc/cron.d/dcor-reset"
     owner: root
     group: root
     mode: '0644'
