@@ -27,6 +27,7 @@
     - "run-jobs-dc-serve"
   loop_control:
     loop_var: ckan_command
+    index_var: cron_hour
 
 - name: Setup DCOR nightly cleanup/pruning
   ansible.builtin.template:
@@ -37,11 +38,13 @@
     mode: '0644'
   loop:
     - "dcor-prune-stale-multipart-uploads"
+    - "dcor-prune-draft-datasets"
     # The following is too dangerous and should only be done manually
     # when the maintainer knows that the database is intact!
     # - "dcor-prune-orphaned-s3-artifacts"
   loop_control:
     loop_var: ckan_command
+    index_var: cron_hour
 
 - name: Weekly purge all datasets for development instances
   ansible.builtin.template:
