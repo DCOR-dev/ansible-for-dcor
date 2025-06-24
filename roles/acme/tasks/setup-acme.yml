@@ -1,0 +1,34 @@
+- name: Install snapd
+  ansible.builtin.apt:
+    name: snapd
+    state: present
+
+- name: Ensure snapd is enabled.
+  systemd:
+    name: snapd.socket
+    enabled: true
+    state: started
+
+- name: Install certbot
+  community.general.snap:
+    name: certbot
+    classic: true
+
+- name: Symlink certbot into place.
+  file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
+
+- name: Setup acme challenge directory
+  ansible.builtin.file:
+    path: "{{ ACME_CHALLENGE_WEBROOT }}"
+    state: directory
+    mode: '0770'
+    owner: 'root'
+    group: 'www-data'
+
+- name: Get a Let's Encrypt certificate
+  ansible.builtin.shell:
+    executable: bash
+    cmd: /usr/bin/certbot certonly  --webroot --webroot-path {{ ACME_CHALLENGE_WEBROOT }} -d {{ FULLY_QUALIFIED_DOMAIN_NAME }} --noninteractive --agree-tos --email {{ MAINTAINER_EMAIL }}

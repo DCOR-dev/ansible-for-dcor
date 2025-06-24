@@ -69,5 +69,5 @@ PGP_KEYS_FOR_ENCRYPTED_BACKUPS: []
 
 UWSGI_NUM_WORKERS: 4
 
-SSL_CERTIFICATE_PUBLIC: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
-SSL_CERTIFICATE_PRIVATE: "/etc/ssl/private/ssl-cert-snakeoil.key"
+SSL_CERTIFICATE_PUBLIC: "/etc/letsencrypt/live/{{ FULLY_QUALIFIED_DOMAIN_NAME }}/fullchain.pem"
+SSL_CERTIFICATE_PRIVATE: "/etc/letsencrypt/live/{{ FULLY_QUALIFIED_DOMAIN_NAME }}/privkey.pem"

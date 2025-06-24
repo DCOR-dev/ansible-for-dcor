@@ -1,0 +1,3 @@
+- name: Setup ACME
+  include_tasks: setup-acme.yml
+  when: DCOR_HTTPS_ENABLED | bool

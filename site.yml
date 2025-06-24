@@ -5,6 +5,7 @@
         maintenance_mode: true
     - common
     - secrets
+    - acme
     - ckan
     - dcor
     - role: maintenance

@@ -1,0 +1,3 @@
+DCOR_HTTPS_ENABLED: true
+FULLY_QUALIFIED_DOMAIN_NAME: "localhost"
+ACME_CHALLENGE_WEBROOT: "/var/www/acme-challenge"

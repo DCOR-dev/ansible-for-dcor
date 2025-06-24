@@ -15,7 +15,15 @@ server {
     listen 80;
     listen [::]:80;
     server_name {{ FULLY_QUALIFIED_DOMAIN_NAME }};
-    return 301 https://$host$request_uri;
+
+    # Let's Encrypt ACME challenge
+    location ~ "^/\.well-known/acme-challenge/" {
+        root /var/www/acme-challenge/;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }
 
 # Reject traffic that is not directed at `{{ FULLY_QUALIFIED_DOMAIN_NAME }}:80`
