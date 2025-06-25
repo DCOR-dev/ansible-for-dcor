@@ -1,11 +1,9 @@
 [dcorservers]
-dcor-dev.testing
 dcor-dev.mpl.mpg.de
 dcor.mpl.mpg.de
 dcor-colab.mpl.mpg.de
 
 [mpcdf]
-dcor-dev.testing
 dcor-dev.mpl.mpg.de
 dcor.mpl.mpg.de
 dcor-colab.mpl.mpg.de
