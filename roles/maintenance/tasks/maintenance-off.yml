@@ -4,6 +4,7 @@
       community.general.supervisorctl:
         name: all
         state: started
+      when: "'supervisor' in ansible_facts.packages"
     - name: Enable DCOR page
       file:
         src: /etc/nginx/sites-available/dcor

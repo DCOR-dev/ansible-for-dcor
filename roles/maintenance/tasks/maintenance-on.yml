@@ -44,6 +44,7 @@
       community.general.supervisorctl:
         name: all
         state: stopped
+      when: "'supervisor' in ansible_facts.packages"
     - name: Disable DCOR page
       file:
         path: /etc/nginx/sites-enabled/dcor

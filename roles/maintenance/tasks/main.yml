@@ -1,7 +1,22 @@
 - name: Install nginx
   ansible.builtin.apt:
-    name: nginx
+    name:
+      # for showing maintenance page
+      - nginx
+      # for ansible.builtin.package_facts with apt manager
+      - python3-apt
+      # to obtain a temporary snakeoil TLS certificate
+      - ssl-cert
     state: latest
+
+- name: Make sure nginx' default site is not enabled to avoid conflicts
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: apt
 
 - name: Maintenance check on
   include_tasks: maintenance-on.yml

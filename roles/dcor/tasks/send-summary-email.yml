@@ -7,7 +7,7 @@
         suffix: temp
       register: tempfile
 
-    - name: Run DCOR inspect and pipe the output to a temporary file
+    - name: Run DCOR status and pipe the output to a temporary file
       ansible.builtin.shell:
         executable: bash
         cmd: "dcor status > {{ tempfile.path }}"
