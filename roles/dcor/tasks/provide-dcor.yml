@@ -139,7 +139,7 @@
 
 - name: Check if favicon exists
   stat:
-    path: "/var/www/favicon.ico"
+    path: "/var/www/dcor-favicon.ico"
   register: favicon_result
 
 - name: Setup favicon
