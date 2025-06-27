@@ -3,10 +3,10 @@ EMAIL_SMTP_STARTTLS: false
 EMAIL_SMTP_TLS: false
 EMAIL_SMTP_USER: ""
 EMAIL_SMTP_PASSWORD: ""
-EMAIL_SMTP_MAIL_FROM: "noreply-dcor-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@mpcdf.mpg.de"
+EMAIL_SMTP_MAIL_FROM: "noreply-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@hpccloud.mpcdf.mpg.de"
 EMAIL_SMTP_REPLY_TO: ""
 # The maintainer Email is in the vault
 CKAN_INI_EMAIL_TO: "{{ MAINTAINER_EMAIL }}"
-CKAN_INI_ERROR_EMAIL_FROM: "error-dcor-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@mpcdf.mpg.de"
+CKAN_INI_ERROR_EMAIL_FROM: "error-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@hpccloud.mpcdf.mpg.de"
 DCOR_S3_ENDPOINT_URL: "https://objectstore.hpccloud.mpcdf.mpg.de"
 PGP_KEYS_FOR_ENCRYPTED_BACKUPS: ["2B4B066FFE3D288E"]

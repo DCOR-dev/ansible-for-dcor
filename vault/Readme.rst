@@ -18,3 +18,11 @@ for the playbook to run. To use the vaults when running the playbook, use the ``
 option and you will be asked for the password::
 
     ansible-playbook -J -i production site.yml
+
+A typical `ansible_hostname.yml` file contains the following keys::
+
+    # dcor.example.com.yml
+    DCOR_S3_ACCESS_KEY_ID: "laoisd8hfq09r83up93r8"
+    DCOR_S3_SECRET_ACCESS_KEY: "dol198jlo98hedl9q834"
+    CKAN_INI_SECRET_KEY: "AaLSODIJPl2893uep0w9fu"
+    MAINTAINER_EMAIL: "dcor-maintainer@example.com"
