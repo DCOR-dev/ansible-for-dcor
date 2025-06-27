@@ -10,11 +10,11 @@
     - name: Run DCOR inspect and pipe the output to a temporary file
       ansible.builtin.shell:
         executable: bash
-        cmd: "dcor inspect > {{ tempfile.path }}"
+        cmd: "dcor status > {{ tempfile.path }}"
 
     - name: Send email
       ansible.builtin.shell:
         executable: bash
-        cmd: "ckan send-mail --recipient {{ MAINTAINER_EMAIL }} --subject 'Ansible success' --file_body {{ tempfile.path }}"
+        cmd: "ckan send-mail --recipient {{ MAINTAINER_EMAIL }} --subject 'DCOR Success: {{ inventory_hostname }}' --file_body {{ tempfile.path }}"
 
   when: EMAIL_SMTP_SERVER != ""
