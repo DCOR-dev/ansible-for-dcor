@@ -77,11 +77,21 @@
 
   when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
 
-- name: Make sure solr logging level is "warn"
-  ansible.builtin.replace:
-    path: /var/solr/log4j2.xml
-    regexp: '(.*)level="info"(.*)'
-    replace: '\1level="warn"\2'
+- name: Tune down solr logging
+  block:
+    - name: Make sure solr logging level is "warn"
+      ansible.builtin.replace:
+        path: /var/solr/log4j2.xml
+        regexp: '(.*)level="info"(.*)'
+        replace: '\1level="warn"\2'
+
+    - name: disable requests logging
+      # The problem was that solr log files became ~8GB in size
+      # https://solr.apache.org/guide/solr/latest/deployment-guide/configuring-logging.html#request-logging
+      ansible.builtin.lineinfile:
+        path: /etc/default/solr.in.sh
+        insertafter: '#SOLR_REQUESTLOG_ENABLED=true'
+        line: "SOLR_REQUESTLOG_ENABLED=false"
 
 - name: Restart Solr
   ansible.builtin.service:
