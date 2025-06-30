@@ -32,7 +32,7 @@
       update-rc.d -f solr remove
   when: solr_vd.rc == 0 and SOLR_VERSION not in solr_vd.stdout
 
-- name: Ensure currect Solr version is installed
+- name: Ensure correct Solr version is installed
   block:
     - name: Create install directory
       ansible.builtin.file:
@@ -75,11 +75,18 @@
         url: "https://raw.githubusercontent.com/ckan/ckan/dev-v{{ CKAN_MINOR_VERSION }}/ckan/config/solr/schema.xml"
         dest: "/var/solr/data/ckan/conf/managed-schema.xml"
 
-    - name: Restart Solr
-      ansible.builtin.service:
-        name: solr
-        state: restarted
   when: solr_vd.rc != 0 or SOLR_VERSION not in solr_vd.stdout
+
+- name: Make sure solr logging level is "warn"
+  ansible.builtin.replace:
+    path: /var/solr/log4j2.xml
+    regexp: '(.*)level="info"(.*)'
+    replace: '\1level="warn"\2'
+
+- name: Restart Solr
+  ansible.builtin.service:
+    name: solr
+    state: restarted
 
 - name: Make sure Solr is reachable
   ansible.builtin.uri:
