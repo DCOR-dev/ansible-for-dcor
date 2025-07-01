@@ -83,7 +83,7 @@
         executable: bash
         cmd: |
           source {{ CKAN_ENVIRONMENT_ACTIVATE }}
-          ckan search-index rebuild --clear
+          ckan search-index rebuild --clear --force
 
     - name: Rename the restore file, so that it is not used again
       local_action: command mv '{{ restore_path_local }}' '{{ restore_path_local }}.restored-{{ now(utc=true,fmt='%Y-%m-%d_%H.%M.%S') }}'
