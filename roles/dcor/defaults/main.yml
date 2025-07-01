@@ -1,5 +1,6 @@
 CKAN_ENVIRONMENT_DIRECTORY: "/usr/lib/ckan/default"
 CKAN_ENVIRONMENT_ACTIVATE: "{{ CKAN_ENVIRONMENT_DIRECTORY }}/bin/activate"
+CKAN_ENV_SITE_PACKAGES_DIRECTORY: "/usr/lib/ckan/default/lib/python3.12/site-packages"
 
 FULLY_QUALIFIED_DOMAIN_NAME: "{{ inventory_hostname }}"
 
@@ -28,7 +29,7 @@ DCOR_USE_LOCAL_MINIO: false
 # because it is a sane default.
 DCOR_HTTPS_ENABLED: true
 # Path to ckanext.dcor_schemas installation in regular install
-DCOR_SCHEMAS_PATH_DEFAULT: "{{ CKAN_ENVIRONMENT_DIRECTORY }}/lib/python3.12/site-packages/ckanext/dcor_schemas"
+DCOR_SCHEMAS_PATH_DEFAULT: "{{ CKAN_ENV_SITE_PACKAGES_DIRECTORY }}/ckanext/dcor_schemas"
 # Path to ckanext.dcor_schemas installation when DCOR_DEVELOP == true
 DCOR_SCHEMAS_PATH_DEVELOP: "/dcor-repos/ckanext-dcor_schemas/ckanext/dcor_schemas"
 
