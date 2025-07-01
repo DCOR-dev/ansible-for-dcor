@@ -1,3 +1,3 @@
-PATH={{ CKAN_ENVIRONMENT_DIRECTORY }}/bin
+PATH={{ CKAN_ENVIRONMENT_DIRECTORY }}/bin:/usr/bin
 # Run 'ckan {{ ckan_command }}' at {{ cron_hour }}:00h
 0 {{ cron_hour }} * * * root ckan -c {{ CKAN_INI }} {{ ckan_command }} --modified-days 1 >> /var/log/ckan/ckan-cron-{{ ckan_command }}.log 2>&1
