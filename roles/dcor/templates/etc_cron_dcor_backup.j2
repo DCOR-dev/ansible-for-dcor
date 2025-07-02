@@ -1,3 +1,3 @@
 PATH=/usr/bin
-# Run database backup for {{ gpg_identifier }} at three o'clock
+# Run database backup for {{ gpg_identifier }} at five o'clock
 {{ backup_cron_tens_minute + 1 }}0 5 * * * root dcor encrypted-database-backup --key-id {{ gpg_identifier }} >> /var/log/ckan/ckan-cron-encrypted-database-backup.log 2>&1
