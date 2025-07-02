@@ -32,7 +32,8 @@ DCOR_HTTPS_ENABLED: true
 DCOR_SCHEMAS_PATH_DEFAULT: "{{ CKAN_ENV_SITE_PACKAGES_DIRECTORY }}/ckanext/dcor_schemas"
 # Path to ckanext.dcor_schemas installation when DCOR_DEVELOP == true
 DCOR_SCHEMAS_PATH_DEVELOP: "/dcor-repos/ckanext-dcor_schemas/ckanext/dcor_schemas"
-
+# Whether to perform encrypted database backups and upload them to S3
+DCOR_ENCRYPTED_BACKUPS_ENABLED: true
 # Color of web favicon
 DCOR_FAVICON_COLOR: "#a47f45"
 
@@ -65,8 +66,7 @@ MINIO_CLIENT_DEB_NAME: "mcli_{{ MINIO_CLIENT_VERSION }}_amd64.deb"
 MINIO_CLIENT_DEB_SHA256: "e4e100c6cb5cb7087527602f9a618c60599da345834e497d66f41af18ce730f1"
 
 ANSIBLE_DOWNLOAD_DIR: "/root/ansible_downloads/"
-PGP_KEY_DIR: "/root/pgp_keys"
-PGP_KEYS_FOR_ENCRYPTED_BACKUPS: []
+GPG_KEY_DIR: "/root/gpg_keys"
 
 UWSGI_NUM_WORKERS: 4
 

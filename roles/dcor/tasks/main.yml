@@ -1,5 +1,12 @@
-- include_tasks: provide-minio.yml
+- name: provide minio
+  include_tasks: provide-minio.yml
   when: DCOR_USE_LOCAL_MINIO | bool
-- include_tasks: provide-dcor.yml
-- include_tasks: provide-cron.yml
-- include_tasks: send-summary-email.yml
+
+- name: provide dcor
+  include_tasks: provide-dcor.yml
+
+- name: provide cron
+  include_tasks: provide-cron.yml
+
+- name: summary email
+  include_tasks: send-summary-email.yml

@@ -63,36 +63,49 @@
 
     - name: Create keys directory
       ansible.builtin.file:
-        path: "{{ PGP_KEY_DIR }}"
+        path: "{{ GPG_KEY_DIR }}"
         state: directory
         owner: root
         group: root
         mode: 0700
 
-    - name: Copy key to host
+    - name: Copy keys to host
       ansible.builtin.copy:
-        src: pgp_*.pub
-        dest: "{{ PGP_KEY_DIR }}"
-        owner: root
+        src: "{{ item }}"
+        dest: "{{ GPG_KEY_DIR }}/"
+        owner: "root"
         group: root
-        mode: '0600'
+        mode: 0600
         remote_src: no
+      with_fileglob: "{{ playbook_dir }}/gpg_keys/key_*.pub"
 
-    - name: Import and trust keys
+    - name: Find all keys on remote host
+      find:
+        paths: "{{ GPG_KEY_DIR }}"
+        patterns: 'key_*.pub'
+        file_type: any
+      register: gpg_key_files
+
+    - name: Import keys on host
       ansible.builtin.shell:
         executable: /bin/bash
-        cmd: |
-          # import all keys
-          find {{ PGP_KEY_DIR }} -type f | xargs gpg --import
+        cmd: "gpg --import {{ item.path }}"
+      loop: "{{ gpg_key_files.files }}"
 
-    - name: Create cron job
+    - name: Create list of GPG IDs
+      set_fact:
+        list_gpg_ids: "{{ list_tunnel | default([]) + [item.path | basename | split('_') | last | split('.') | first] }}"
+      loop: "{{ gpg_key_files.files }}"
+
+    - name: Create cron job for every key
       ansible.builtin.template:
         src: "etc_cron_dcor_backup.j2"
-        dest: "/etc/cron.d/dcor-encrypted-backup-{{ pgp_identifier }}.conf"
+        dest: "/etc/cron.d/dcor-encrypted-backup-{{ gpg_identifier }}"
         owner: root
         group: root
         mode: '0644'
-      loop: "{{ PGP_KEYS_FOR_ENCRYPTED_BACKUPS }}"
+      loop: "{{ list_gpg_ids }}"
       loop_control:
-        loop_var: pgp_identifier
-  when: PGP_KEYS_FOR_ENCRYPTED_BACKUPS | bool
+        loop_var: gpg_identifier
+        index_var: backup_cron_tens_minute
+  when: DCOR_ENCRYPTED_BACKUPS_ENABLED | bool
