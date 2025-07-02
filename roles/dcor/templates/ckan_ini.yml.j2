@@ -93,7 +93,7 @@ ckanext.dcor_schemas.json_resource_schema_dir: package
 
 
 # licenses path
-licenses_group_url: "file://{{ DCOR_SCHEMAS_PATH_DEVELOP if DCOR_DEVELOP else DCOR_SCHEMAS_PATH_DEFAULT }}/licenses.json"
+licenses_group_url: {{ CKAN_INI_LICENSES_GROUP_URL }}
 
 
 # CRSF protection
