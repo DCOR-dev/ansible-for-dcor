@@ -7,13 +7,13 @@
     - name: Define backup names
       set_fact:
         # database
-        backup_path_db: "/backups/postgresql/backup_{{ POSTGRESQL_CKAN_DATABASE }}_{{ backup_time }}.pgc"
+        backup_path_db: "/backups/database/backup_db_{{ POSTGRESQL_CKAN_DATABASE }}_{{ backup_time }}_ansible.pgc"
         # storage (images of users and circles)
-        backup_path: "/backups/full/backup_full_{{ backup_time }}.tar.bz2"
+        backup_path: "/backups/instance/backup_instance_{{ backup_time }}_ansible.tar.bz2"
 
     - name: Ensure DB backup directory exist
       ansible.builtin.file:
-        path: "/backups/postgresql"
+        path: "/backups/database"
         state: directory
         mode: '0770'
         owner: 'postgres'
@@ -21,7 +21,7 @@
 
     - name: Ensure full backup directory exist
       ansible.builtin.file:
-        path: "/backups/full"
+        path: "/backups/instance"
         state: directory
         mode: '0700'
         owner: 'root'

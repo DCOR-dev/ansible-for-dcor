@@ -2,7 +2,7 @@
   tasks:
     - name: Hard-coded backup file
       set_fact:
-         restore_path_local: "{{ playbook_dir }}/backups/host-{{ inventory_hostname }}/restore_full.tar.bz2"
+         restore_path_local: "{{ playbook_dir }}/backups/host-{{ inventory_hostname }}/restore_instance.tar.bz2"
 
     - name: Check whether we have a restore file
       local_action: stat path={{ restore_path_local }}

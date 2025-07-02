@@ -41,7 +41,7 @@ To create a backup, run::
     ansible-playbook -i staging backup-create.yml
 
 This will create a compressed backup in the corresponding ``backups/host-*`` directory.
-For restoring a backup, you have to rename it to ``restore_full.tar.bz2`` in the
+For restoring a backup, you have to rename it to ``restore_instance.tar.bz2`` in the
 corresponding host-specific directory. Note that if the ``CKAN_INI_STORAGE_PATH``
 variable is different on the restore host, you will have to either manually
 move the files after restoring or modify the backup file in-place.
@@ -49,5 +49,5 @@ To restore a backup, run::
 
     ansible-playbook -i staging backup-restore.yml
 
-Only hosts for which the ``restore_full.tar.bz2`` files exist will be restored
+Only hosts for which the ``restore_instance.tar.bz2`` files exist will be restored
 from backup.

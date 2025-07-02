@@ -6,7 +6,7 @@
   local_action: stat path={{ restore_path_local }}
   register: restore_file_stat
 
-- name: Restore backup from playbook_dir/backups/ansible_host/backup_full.tar.bz2
+- name: Restore backup from playbook_dir/backups/ansible_host/restore_instance.tar.bz2
   block:
     - name: Install Dependencies
       ansible.builtin.apt:
@@ -41,7 +41,7 @@
 
     - name: find database file
       ansible.builtin.find:
-        paths: "{{ restore_unarchive }}/backups/postgresql"
+        paths: "{{ restore_unarchive }}/backups/database"
         patterns: '*.pgc'
       # there should only be one database file
       register: dbfiles
