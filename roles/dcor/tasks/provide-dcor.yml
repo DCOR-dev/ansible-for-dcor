@@ -104,6 +104,15 @@
   environment:
     CKAN_INI: "{{ CKAN_INI }}"
 
+- name: Copy resource_schema_supplements
+  ansible.builtin.copy:
+    src: "resource_schema_supplements/{{ item }}"
+    dest: "{{ CKAN_INI_DCOR_SCHEMAS_JSON_RESOURCE_SCHEMA_DIRECTORY }}/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: no
+  loop: "{{ DCOR_ADDITIONAL_RESOURCE_SCHEMA_SUPPLEMENTS }}"
 
 - name: Setup nginx
   block:

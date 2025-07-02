@@ -89,11 +89,11 @@ ckanext.dc_serve.tmp_dir: {{ CACHE_DIR }}/ckanext-dc_serve
 ckan.extra_resource_fields: etag sha256
 ckanext.dcor_schemas.allow_content_listing_for_anon: {{ CKAN_INI_DCOR_SCHEMAS_ALLOW_CONTENT_LISTING_FOR_ANON }}
 ckanext.dcor_schemas.allow_public_datasets: {{ CKAN_INI_DCOR_SCHEMAS_ALLOW_PUBLIC_DATASETS }}
-ckanext.dcor_schemas.json_resource_schema_dir: package
+ckanext.dcor_schemas.json_resource_schema_dir: file://{{ CKAN_INI_DCOR_SCHEMAS_JSON_RESOURCE_SCHEMA_DIRECTORY }}
 
 
 # licenses path
-licenses_group_url: {{ CKAN_INI_LICENSES_GROUP_URL }}
+licenses_group_url: file://{{ CKAN_INI_LICENSES_GROUP_URL }}
 
 
 # CRSF protection
