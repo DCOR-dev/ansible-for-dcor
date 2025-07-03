@@ -100,7 +100,7 @@
     - name: Create cron job for every key
       ansible.builtin.template:
         src: "etc_cron_dcor_backup.j2"
-        dest: "/etc/cron.d/dcor-encrypted-backup-{{ gpg_identifier }}"
+        dest: "/etc/cron.d/dcor-encrypted-instance-backup-{{ gpg_identifier }}"
         owner: root
         group: root
         mode: '0644'
