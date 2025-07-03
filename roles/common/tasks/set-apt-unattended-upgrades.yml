@@ -4,7 +4,7 @@
     name: hifis.toolkit.unattended_upgrades
   vars:
     unattended_automatic_reboot: true
-    unattended_automatic_reboot_time: "02:00"
+    unattended_automatic_reboot_time: "00:01"
     unattended_mail_report: "{{ MAINTAINER_EMAIL }}"
 
 - name: Install mailx and ssmtp for email notification
