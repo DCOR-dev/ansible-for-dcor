@@ -3,12 +3,13 @@
 # Requires=solr.service
 # After=solr.service
 Wants=solr.service
-ExecStartPre=systemctl is-active solr.service
 Wants=redis.service
-ExecStartPre=systemctl is-active redis.service
 Wants=postgresql.service
-ExecStartPre=systemctl is-active postgresql.service
 
 [Service]
+ExecStartPre=systemctl is-active solr.service
+ExecStartPre=systemctl is-active redis.service
+ExecStartPre=systemctl is-active postgresql.service
+
 Restart=always
 RestartSec=20
