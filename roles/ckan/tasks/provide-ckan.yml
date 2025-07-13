@@ -64,14 +64,14 @@
     state: restarted
 
 - block:
-    - name: Create override directory for Solr systemd
+    - name: Create override directory for Supervisor systemd
       ansible.builtin.file:
         owner: root
         group: root
         mode: 0755
         path: /etc/systemd/system/supervisor.service.d
         state: directory
-    - name: deploy supervisor override for Solr systemd
+    - name: deploy systemd override for Supervisor
       ansible.builtin.template:
         src: systemd_supervisor-override.conf.j2
         dest: /etc/systemd/system/supervisor.service.d/override.conf

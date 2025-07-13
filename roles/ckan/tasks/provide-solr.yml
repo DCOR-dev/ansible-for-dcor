@@ -93,6 +93,26 @@
         insertafter: '#SOLR_REQUESTLOG_ENABLED=true'
         line: "SOLR_REQUESTLOG_ENABLED=false"
 
+- name: Override Solr systemd
+  block:
+    - name: Create override directory for Solr systemd
+      ansible.builtin.file:
+        owner: root
+        group: root
+        mode: 0755
+        path: /etc/systemd/system/solr.service.d
+        state: directory
+    - name: deploy systemd override for Solr
+      ansible.builtin.template:
+        src: systemd_solr-override.conf.j2
+        dest: /etc/systemd/system/solr.service.d/override.conf
+        group: root
+        owner: root
+        mode: 0644
+    - name: Tell systemd to reread configs
+      ansible.builtin.systemd:
+        daemon_reload: true
+
 - name: Restart Solr
   ansible.builtin.service:
     name: solr

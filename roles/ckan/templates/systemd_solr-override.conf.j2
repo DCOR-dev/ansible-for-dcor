@@ -1,0 +1,7 @@
+[Unit]
+Wants=postgresql.service
+ExecStartPre=systemctl is-active postgresql.service
+
+[Service]
+Restart=always
+RestartSec=10
