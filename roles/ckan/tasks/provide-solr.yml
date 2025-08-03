@@ -106,6 +106,10 @@
     - name: Tell systemd to reread configs
       ansible.builtin.systemd:
         daemon_reload: true
+    - name: Enable solr service
+      ansible.builtin.systemd:
+        name: solr
+        enabled: true
 
 - name: Restart Solr
   ansible.builtin.service:
