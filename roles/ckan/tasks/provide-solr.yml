@@ -93,19 +93,13 @@
         insertafter: '#SOLR_REQUESTLOG_ENABLED=true'
         line: "SOLR_REQUESTLOG_ENABLED=false"
 
-- name: Override Solr systemd
+- name: Create Solr systemd Unit
+  # derived service from sysv-init does not recover from crashes
   block:
-    - name: Create override directory for Solr systemd
-      ansible.builtin.file:
-        owner: root
-        group: root
-        mode: 0755
-        path: /etc/systemd/system/solr.service.d
-        state: directory
-    - name: deploy systemd override for Solr
+    - name: deploy systemd service for Solr
       ansible.builtin.template:
-        src: systemd_solr-override.conf.j2
-        dest: /etc/systemd/system/solr.service.d/override.conf
+        src: etc_systemd_solr.service.j2
+        dest: /etc/systemd/system/solr.service
         group: root
         owner: root
         mode: 0644
