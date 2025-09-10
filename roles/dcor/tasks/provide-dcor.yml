@@ -31,7 +31,8 @@
         option: "{{ item.key }}"
         value: "{{ item.value }}"
       with_items:
-        - "{{ ckan_ini_data | from_yaml | dict2items }}"
+        # convert to dict and remove items that have empty values
+        - "{{ ckan_ini_data | from_yaml | dict2items | rejectattr('value', 'none') }}"
 
 - name: Apply custom branding
   block:

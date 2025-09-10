@@ -117,9 +117,21 @@
     state: restarted
 
 - name: Make sure Solr is reachable
-  ansible.builtin.uri:
-    url: http://localhost:8983/solr
-    status_code: 200
-    return_content: true
-  register: this
-  failed_when: "'Solr Admin' not in this.content"
+  block:
+  - name: Wait until website is online
+    ansible.builtin.uri:
+      url: "http://localhost:8983/solr/"
+      follow_redirects: none
+      method: GET
+    register: _result
+    until: _result.status == 200
+    retries: 30
+    delay: 5 # Every 5 seconds
+
+  - name: Test specific text from URL
+    ansible.builtin.uri:
+      url: "http://localhost:8983/solr/"
+      status_code: 200
+      return_content: true
+    register: this
+    failed_when: "'Solr Admin' not in this.content"
