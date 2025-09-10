@@ -7,5 +7,5 @@ EMAIL_SMTP_MAIL_FROM: "noreply-{{ FULLY_QUALIFIED_DOMAIN_NAME | replace('.','-')
 EMAIL_SMTP_REPLY_TO: ""
 # The maintainer Email is in the vault
 CKAN_INI_EMAIL_TO: "{{ MAINTAINER_EMAIL }}"
-CKAN_INI_ERROR_EMAIL_FROM: "error-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@hpccloud.mpcdf.mpg.de"
+CKAN_INI_ERROR_EMAIL_FROM: "error-{{ FULLY_QUALIFIED_DOMAIN_NAME | replace('.','-') }}@hpccloud.mpcdf.mpg.de"
 DCOR_S3_ENDPOINT_URL: "https://objectstore.hpccloud.mpcdf.mpg.de"
