@@ -3,7 +3,7 @@ EMAIL_SMTP_STARTTLS: false
 EMAIL_SMTP_TLS: false
 EMAIL_SMTP_USER: ""
 EMAIL_SMTP_PASSWORD: ""
-EMAIL_SMTP_MAIL_FROM: "noreply-{{ FULLY_QUALIFIED_DOMAIN_NAME }}@hpccloud.mpcdf.mpg.de"
+EMAIL_SMTP_MAIL_FROM: "noreply-{{ FULLY_QUALIFIED_DOMAIN_NAME | replace('.','-') }}@hpccloud.mpcdf.mpg.de"
 EMAIL_SMTP_REPLY_TO: ""
 # The maintainer Email is in the vault
 CKAN_INI_EMAIL_TO: "{{ MAINTAINER_EMAIL }}"
