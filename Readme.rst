@@ -17,6 +17,7 @@ To get started on your control node, install ansible::
 
 The following roles are available:
 
+- ``acme``: Retrieve TLS certificate from letsencrypt
 - ``backup``: Create and restore backups (see below)
 - ``ckan``: Install CKAN with all its dependencies (including postgresql and Solr)
 - ``common``: General administrative tasks like unattended-upgrades
