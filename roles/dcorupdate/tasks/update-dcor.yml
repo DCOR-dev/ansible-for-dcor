@@ -1,0 +1,13 @@
+- name: Run dcor update
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+      dcor update --yes
+
+- name: Run dcor inspect
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      source {{ CKAN_ENVIRONMENT_ACTIVATE }}
+      dcor inspect --assume-yes

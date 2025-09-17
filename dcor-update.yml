@@ -1,0 +1,9 @@
+- hosts: dcorservers
+  roles:
+    - role: maintenance
+      vars:
+        maintenance_mode: true
+    - dcorupdate
+    - role: maintenance
+      vars:
+        maintenance_mode: false

@@ -1,0 +1,5 @@
+- name: update DCOR
+  include_tasks: update-dcor.yml
+
+- name: summary email
+  include_tasks: send-summary-email.yml

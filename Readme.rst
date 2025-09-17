@@ -21,6 +21,7 @@ The following roles are available:
 - ``ckan``: Install CKAN with all its dependencies (including postgresql and Solr)
 - ``common``: General administrative tasks like unattended-upgrades
 - ``dcor``: Install DCOR on top of an existing CKAN installation
+- ``dcorupdate``: Used by `dcor-update.yml` for updating the DCOR Python libraries.
 - ``maintenance``: put a DCOR instance into maintenance mode
 - ``secrets``: Set up internal secrets for DCOR
 
@@ -28,6 +29,14 @@ Notes:
 
 - The ``site.yml`` playbook does not touch the redis or postgresql databases.
   Only access credentials are modified.
+
+
+Updates
+-------
+Although a DCOR instance can be updated by running `site.yml`, this
+is not always necessary. If only the CKAN extensions or other Python
+dependencies changed, use the `dcor-update.yml` playbook (this also does not
+require decrypting vaults).
 
 
 Backups
