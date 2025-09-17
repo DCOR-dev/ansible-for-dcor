@@ -36,8 +36,11 @@ Updates
 -------
 Although a DCOR instance can be updated by running `site.yml`, this
 is not always necessary. If only the CKAN extensions or other Python
-dependencies changed, use the `dcor-update.yml` playbook (this also does not
-require decrypting vaults).
+dependencies changed, use the `dcor-update.yml` playbook (note that
+for sending the status email to the maintainer, the `-J` option for
+the vault password is required)::
+
+    ansible-playbook -J -i staging dcor-update.yml
 
 
 Backups

@@ -12,7 +12,7 @@
         executable: bash
         cmd: "dcor status > {{ tempfile.path }}"
 
-    - name: Send email
+    - name: "Send email to {{ MAINTAINER_EMAIL }}"
       ansible.builtin.shell:
         executable: bash
         cmd: "ckan send-mail --recipient {{ MAINTAINER_EMAIL }} --subject 'DCOR Update Success: {{ inventory_hostname }}' --file_body {{ tempfile.path }}"

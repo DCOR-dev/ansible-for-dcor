@@ -3,6 +3,7 @@
     - role: maintenance
       vars:
         maintenance_mode: true
+    - secrets
     - dcorupdate
     - role: maintenance
       vars:
