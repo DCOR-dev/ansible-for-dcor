@@ -17,3 +17,18 @@ Then, move it to ``backups/host-{{ FULLY_QUALIFIED_DOMAIN_NAME }}/restore_instan
 and run::
 
     ansible-playbook -i YOURINVENTORY backup-restore.yml
+
+
+Adding keys to the playbook
+===========================
+If you have an .asc file, convert it to an .gpg file with::
+
+    gpg --dearmor filename.asc
+
+Then, rename the gpg file to::
+
+    key_SIGID.pub
+
+Where ``SIGID`` is the signature of the key that you can obtain with::
+
+    gpg -v filename.gpg
