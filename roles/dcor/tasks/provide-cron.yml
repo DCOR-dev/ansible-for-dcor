@@ -94,8 +94,7 @@
 
     - name: Create list of GPG IDs
       set_fact:
-        list_gpg_ids: "{{ list_tunnel | default([]) + [item.path | basename | split('_') | last | split('.') | first] }}"
-      loop: "{{ gpg_key_files.files }}"
+         list_gpg_ids: "{{ gpg_key_files.files | map(attribute='path') | map('split', '_') | map('last') | map('split', '.') | map('first') }}"
 
     - name: Create cron job for every key
       ansible.builtin.template:
