@@ -32,3 +32,13 @@
   ansible.builtin.shell:
     executable: bash
     cmd: /usr/bin/certbot certonly  --webroot --webroot-path {{ ACME_CHALLENGE_WEBROOT }} -d {{ FULLY_QUALIFIED_DOMAIN_NAME }} --noninteractive --agree-tos --email {{ MAINTAINER_EMAIL }}
+
+- name: Automatically reload nginx to update the TLS certificate
+  ansible.builtin.cron:
+    name: reload nginx regularly to update the TLS certificate
+    minute: "3"
+    hour: "2"
+    day: "*/4"
+    user: "root"
+    job: "/usr/bin/systemctl reload nginx"
+    cron_file: ansible_reload_nginx
