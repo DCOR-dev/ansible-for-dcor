@@ -7,9 +7,9 @@ CKAN_INI_SOLR_URL: "http://localhost:8983/solr/ckan"
 
 CKAN_MAJOR_VERSION: "2"
 CKAN_MINOR_VERSION: "2.11"
-CKAN_PATCH_VERSION: "2.11.3"
-CKAN_DEB_NAME: "python-ckan_{{ CKAN_MINOR_VERSION }}-{{ ansible_distribution_release }}_amd64.deb"
-CKAN_DEB_MD5: "8e4c8b1587df23d88e4270d02690e135"  # noble
+CKAN_PATCH_VERSION: "2.11.5"
+CKAN_DEB_NAME: "python-ckan_{{ CKAN_MINOR_VERSION }}-{{ ansible_facts['distribution_release'] }}_amd64.deb"
+CKAN_DEB_MD5: "d0a43cc5c66154e638b6ee8090e6cf3c"  # noble
 
 ANSIBLE_DOWNLOAD_DIR: "/root/ansible_downloads/"
 
