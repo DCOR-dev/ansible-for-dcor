@@ -1,7 +1,12 @@
 PATH=/usr/bin
 # Reset the CKAN instance every Sunday for development instances.
-# The user `dcoraid` is protected from purging.
-# TODO: The `dcor prune` call at the end makes sure all resources on S3 are also deleted.
+# - `dcor-purge-all` removes users without datasets and users with datasets
+#   that were inactive for more than a week (sysadmins are kept). It purges
+#   all datasets, collections, and circles, except for the figshare circle
+#   (`figshare-import`) and its datasets.
+# - `dcor-import-figshare` only imports figshare datasets that are missing.
+# - `dcor-prune-orphaned-s3-artifacts` removes the S3 objects and buckets of
+#   purged datasets and circles.
 {% if DCOR_DEVELOP | bool %}
-30 0 * * 7 root (date && ckan dcor-purge-unused-collections-and-circles --modified-before-months 0 && dcor reset --datasets --zombie-users --keep-user dcoraid --yes && {% if DCOR_FIGSHARE_IMPORT | bool %} ckan dcor-import-figshare && {% endif %} ckan search-index rebuild --clear && dcor inspect --assume-yes && ckan dcor-prune-orphaned-s3-artifacts) >> /var/log/ckan/ckan-cron-reset.log 2>&1
+30 0 * * 7 root (date && ckan dcor-purge-all --keep-circle figshare-import --user-inactive-days 7 --yes && {% if DCOR_FIGSHARE_IMPORT | bool %} ckan dcor-import-figshare && {% endif %} ckan search-index rebuild --clear && dcor inspect --assume-yes && ckan dcor-prune-orphaned-s3-artifacts) >> /var/log/ckan/ckan-cron-reset.log 2>&1
 {% endif %}
