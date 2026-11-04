@@ -13,6 +13,16 @@
         group: root
         mode: '0644'
 
+- name: Remove obsolete DCOR nightly jobs
+  ansible.builtin.file:
+    path: "/etc/cron.d/dcor-{{ ckan_command }}"
+    state: absent
+  loop:
+    # removed in ckanext-dcor_depot 1.1.0
+    - "run-jobs-dcor-depot"
+  loop_control:
+    loop_var: ckan_command
+
 - name: Setup DCOR nightly jobs
   ansible.builtin.template:
     src: "etc_cron_dcor_jobs.j2"
@@ -21,7 +31,6 @@
     group: root
     mode: '0644'
   loop:
-    - "run-jobs-dcor-depot"
     - "run-jobs-dcor-schemas"
     - "run-jobs-dc-view"
     - "run-jobs-dc-serve"
